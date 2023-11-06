@@ -20,19 +20,22 @@
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
-    "react-native": "0.71.14"
+    "react-native": "0.71.14",
+    "react-native-chat-room": "git+https://github.com/AsteriskZuo/react-native-chat-room.git#dev",
+    "react-native-chat-sdk": "1.2.2-beta.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
+    "@commitlint/config-conventional": "17.7.0",
     "@react-native-community/eslint-config": "^3.2.0",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "~18.0.27",
-    "@types/react-native": "0.71.3",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.2.1",
+    "commitlint": "17.7.1",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -49,7 +52,7 @@
   },
   "resolutions": {
     "@expo/cli": "*",
-    "@types/react-native": "*"
+    "@types/react": "*"
   },
   "eslintConfig": {
     "root": true,
@@ -88,5 +91,31 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        [
+          "build",
+          "chore",
+          "ci",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "revert",
+          "style",
+          "test",
+          "tag",
+          "example"
+        ]
+      ]
+    }
   }
 }

@@ -28,18 +28,7 @@ type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChannelListScreen(props: Props) {
   const {} = props;
   const [isStop, setIsStop] = React.useState(true);
-  const dataRef = React.useRef<{ id: string; room: RoomData }[]>([
-    {
-      id: '1',
-      room: {
-        roomId: '1',
-        roomName: '1',
-        description: '1',
-        owner: '2',
-        permissionType: 1,
-      } as any,
-    },
-  ]);
+  const dataRef = React.useRef<{ id: string; room: RoomData }[]>([]);
   const [data, setData] = React.useState(dataRef.current);
   const [value, onValueChange] = React.useState(false);
   const [user, setUser] = React.useState<UserData | undefined>(undefined);
@@ -64,43 +53,20 @@ export function ChannelListScreen(props: Props) {
     },
   });
 
-  // const request2 = React.useCallback(
-  //   async (finished?: () => void) => {
-  //     const s = await im.loginState();
-  //     if (s === 'logged') {
-  //       dataRef.current = [];
-  //       im.fetchChatroomList(1)
-  //         .then((list) => {
-  //           for (const room of list) {
-  //             dataRef.current.push({
-  //               id: room.roomId,
-  //               room: room as any,
-  //             });
-  //           }
-  //           setData([...dataRef.current]);
-  //           finished?.();
-  //         })
-  //         .catch(finished);
-  //     } else {
-  //       finished?.();
-  //     }
-  //   },
-  //   [im]
-  // );
   const request = React.useCallback(
     async (finished?: () => void) => {
       const s = await im.loginState();
       if (s === 'logged') {
+        const token = await im.client.getAccessToken();
         dataRef.current = [];
         AppServerClient.getRoomList({
-          token: await im.client.getAccessToken(),
+          token: token,
           onResult: (params) => {
-            console.log('test:zuoyu:getRoomList:', params);
             if (params.roomList) {
               for (const room of params.roomList) {
                 dataRef.current.push({
                   id: room.roomId,
-                  room: room as any,
+                  room: room,
                 });
               }
               setData([...dataRef.current]);
@@ -160,14 +126,12 @@ export function ChannelListScreen(props: Props) {
       <SafeAreaView
         style={{
           flexGrow: 1,
-          // backgroundColor: 'red',
           paddingHorizontal: 16,
         }}
       >
         <View
           style={{
             height: 56,
-            // backgroundColor: 'red',
             flexDirection: 'row',
             alignItems: 'center',
           }}
@@ -211,17 +175,15 @@ export function ChannelListScreen(props: Props) {
               false: 'switch1',
               true: 'switch2',
             }}
+            iconStyle={{ tintColor: undefined }}
           />
         </View>
         <View
           style={{
             flexGrow: 1,
             width: '100%',
-            // height: 100,
+            height: 100,
             // backgroundColor: 'green',
-          }}
-          onTouchEnd={() => {
-            setIsStop(!isStop);
           }}
         >
           <FlatList
@@ -243,6 +205,8 @@ export function ChannelListScreen(props: Props) {
             }}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={ItemSeparatorComponent}
+            refreshing={isStop === false}
+            onRefresh={onRefresh}
           />
         </View>
         <View

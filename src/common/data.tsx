@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Keyof } from 'react-native-chat-room/lib/typescript/types';
-import { ChatRoom } from 'react-native-chat-sdk';
+import type { ChatRoom } from 'react-native-chat-sdk';
 
 import { avatarUrlBasic, userAvatars, userNickName2 } from '../const';
 import { randomId, randomItem } from '../utils/utils';
@@ -116,29 +116,11 @@ export class UserDataManager {
   }
 }
 type ChatRoomType = { [p in Keyof<ChatRoom>]: ChatRoom[p] };
-export class RoomData extends ChatRoom {
+export interface RoomData extends ChatRoomType {
   ownerAvatar: string;
   ownerNickName: string;
-  videoUrl?: string;
-  videType: 'agora_promotion_live' | 'live';
-  affiliations_count: number;
-  persistent: boolean;
-  constructor(
-    params: ChatRoomType & {
-      ownerAvatar: string;
-      ownerNickName: string;
-      videoUrl?: string;
-      videType: 'agora_promotion_live' | 'live';
-      affiliations_count: number;
-      persistent: boolean;
-    }
-  ) {
-    super(params);
-    this.ownerAvatar = params.ownerAvatar;
-    this.ownerNickName = params.ownerNickName;
-    this.videoUrl = params.videoUrl;
-    this.videType = params.videType;
-    this.affiliations_count = params.affiliations_count;
-    this.persistent = params.persistent;
-  }
+  // videoUrl?: string;
+  // videType: 'agora_promotion_live' | 'live';
+  // affiliations_count: number;
+  // persistent: boolean;
 }

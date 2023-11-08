@@ -55,6 +55,9 @@ export const ChatroomMenu = React.forwardRef<
         startShowWithInit: (initItems?) => {
           menuRef?.current?.startShowWithInit?.(initItems);
         },
+        getData: () => {
+          return menuRef?.current?.getData?.();
+        },
       };
     },
     []

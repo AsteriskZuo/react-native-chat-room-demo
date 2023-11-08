@@ -1,5 +1,5 @@
 import { getRoomListApi, registerUserApi } from '../const';
-import { RoomData } from './data';
+import type { RoomData } from './data';
 
 export class AppServerClient {
   static getLoginToken(params: {
@@ -31,7 +31,7 @@ export class AppServerClient {
         params.onResult({ isOk: true, token: json.access_token });
       })
       .catch((error) => {
-        console.error(error);
+        console.warn('dev:getLoginToken:', error);
         params.onResult({ isOk: false });
       });
   }
@@ -48,7 +48,9 @@ export class AppServerClient {
       },
     })
       .then((response) => {
-        console.log('test:zuoyu:getRoomList:', response);
+        // !!! https://github.com/expo/expo/issues/6496
+        // tip: There was a problem sending log messages to your development environment [PrettyFormatPluginError: value.hasOwnProperty is not a function.
+        // console.log('test:zuoyu:getRoomList:', response);
         if (response.status === 200) {
           return response.json();
         } else {
@@ -56,30 +58,29 @@ export class AppServerClient {
         }
       })
       .then((json) => {
-        console.log('test:zuoyu:getRoomList:', json);
         const jsonList = json.entities as any[];
         const array = [] as RoomData[];
         for (const item of jsonList) {
-          const room = new RoomData({
+          const room = {
             roomId: item.id,
             roomName: item.name,
             description: item.description,
             owner: item.owner,
-            permissionType: -1,
+            // permissionType: -1,
             ownerAvatar: item.iconKey,
             ownerNickName: item.nickname,
-            videoUrl: item.ext?.videoUrl,
-            videType: item.video_type,
-            affiliations_count: item.affiliations_count,
-            persistent: item.persistent,
-          } as any);
+            // videoUrl: item.ext?.videoUrl,
+            // videType: item.video_type,
+            // affiliations_count: item.affiliations_count,
+            // persistent: item.persistent,
+          } as RoomData;
           array.push(room);
         }
 
         params.onResult({ isOk: true, roomList: array });
       })
       .catch((error) => {
-        console.error(error);
+        console.warn('dev:getRoomList:', error);
         params.onResult({ isOk: false });
       });
   }

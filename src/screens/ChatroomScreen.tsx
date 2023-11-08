@@ -5,6 +5,7 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {
@@ -22,10 +23,13 @@ import {
   usePaletteContext,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { RoomData } from 'src/common';
 
-import { BackgroundImageMemo } from '../common/BackgroundImage';
-import { ChatroomMenu, ChatroomMenuRef } from '../common/ChatroomMenu';
+import {
+  BackgroundImageMemo,
+  ChatroomMenu,
+  ChatroomMenuRef,
+  RoomData,
+} from '../common';
 import { gifts, gifts2 } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
@@ -42,6 +46,7 @@ export function ChatroomScreen(props: Props) {
   const im = useIMContext();
   const count = React.useRef(0);
   const { colors } = usePaletteContext();
+  const { width: winWidth } = useWindowDimensions();
   const { getColor } = useColors({
     bg: {
       light: colors.neutral[98],
@@ -127,7 +132,7 @@ export function ChatroomScreen(props: Props) {
       model: {
         id: seqId('_gf').toString(),
         nickName: 'NickName',
-        giftCount: '1',
+        giftCount: 1,
         giftIcon: 'http://notext.png',
         content: 'send Agoraship',
       },
@@ -176,6 +181,8 @@ export function ChatroomScreen(props: Props) {
         marquee={{
           props: {
             containerStyle: {
+              marginLeft: 12,
+              width: winWidth - 24,
               marginTop: 8 + top + 44,
               backgroundColor: getColor('marquee'),
             },
@@ -299,7 +306,7 @@ export function ChatroomScreen(props: Props) {
                     giftId: gift.giftId,
                     giftName: gift.giftName,
                     giftPrice: gift.giftPrice.toString(),
-                    giftCount: '1',
+                    giftCount: 1,
                     giftIcon: gift.giftIcon,
                     giftEffect: gift.giftEffect ?? '',
                     sendedThenClose: true,
@@ -318,7 +325,7 @@ export function ChatroomScreen(props: Props) {
                             im.getUserInfo(im.userId)?.nickName ??
                             im.userId ??
                             'unknown',
-                          giftCount: '1',
+                          giftCount: 1,
                           giftIcon: gift.giftIcon,
                           content: `sent ${gift.giftName}`,
                           avatar: im.userInfoFromMessage(message)?.avatarURL,

@@ -2,6 +2,7 @@ import {
   NavigationAction,
   NavigationContainer,
   NavigationState,
+  useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
@@ -27,14 +28,16 @@ const env = require('./env');
 const Root = createNativeStackNavigator<RootParamsList>();
 
 export function App() {
-  const [initialRouteName] = React.useState('ChannelList' as RootParamsName);
+  const [initialRouteName] = React.useState('Login' as RootParamsName);
   const palette = usePresetPalette();
   const dark = useDarkTheme(palette);
   const light = useLightTheme(palette);
   const [theme, setTheme] = React.useState(light);
   const isNavigationReadyRef = React.useRef(false);
   const isContainerReadyRef = React.useRef(false);
-  const [isReady, setIsReady] = React.useState(false);
+  // const [isReady, setIsReady] = React.useState(false);
+  const navigationRef = useNavigationContainerRef<RootParamsList>();
+  const isReadyRef = React.useRef(false);
 
   const formatNavigationState = (
     state: NavigationState | undefined,
@@ -68,11 +71,18 @@ export function App() {
     };
   }, [dark, light]);
 
-  const onReady = async (isReady: boolean) => {
-    setTimeout(() => {
-      setIsReady(isReady);
-    }, 1000);
+  const onReady = async (_isReady: boolean) => {
+    // setTimeout(() => {
+    //   setIsReady(isReady);
+    // }, 1000);
     // setIsReady(isReady);
+    if (isReadyRef.current === true) {
+      return;
+    }
+    isReadyRef.current = true;
+    console.log('test:zuoyu:onReady:');
+    // navigationRef?.navigate('Login', {});
+    DeviceEventEmitter.emit('example_login', {});
   };
 
   return (
@@ -96,6 +106,7 @@ export function App() {
         }}
       >
         <NavigationContainer
+          ref={navigationRef}
           onStateChange={(state: NavigationState | undefined) => {
             const rr: string[] & string[][] = [];
             formatNavigationState(state, rr);
@@ -123,6 +134,13 @@ export function App() {
           }
         >
           <Root.Navigator initialRouteName={initialRouteName}>
+            <Root.Screen
+              name={'Splash'}
+              options={{
+                headerShown: false,
+              }}
+              component={SplashScreen}
+            />
             <Root.Screen
               name={'Login'}
               options={{
@@ -154,7 +172,7 @@ export function App() {
           </Root.Navigator>
         </NavigationContainer>
       </Container>
-      {isReady === false ? <SplashScreen /> : null}
+      {/* {isReady === false ? <SplashScreen /> : null} */}
     </React.StrictMode>
   );
 }

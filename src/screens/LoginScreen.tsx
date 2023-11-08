@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { View } from 'react-native';
+import { DeviceEventEmitter, View } from 'react-native';
 import {
   Alert,
   AlertRef,
@@ -13,54 +13,83 @@ import type { RootScreenParamsList } from '../routes';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function LoginScreen(props: Props) {
+  console.log('test:zuoyu:LoginScreen');
   const { navigation } = props;
   const appType = require('../env').accountType;
   const im = useIMContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const alertRef = React.useRef<AlertRef>({} as any);
-  const loginAction = React.useCallback(() => {
-    setIsLoading(true);
-    UserDataManager.getCurrentUser((params) => {
-      console.log('test:zuoyu:getCurrentUser', params);
-      if (params.user) {
-        const { userId, nickName, avatar } = params.user;
-        AppServerClient.getLoginToken({
-          userId,
-          nickName,
-          avatar,
-          onResult: (params) => {
-            console.log('test:zuoyu:getLoginToken', params);
-            if (params.isOk) {
-              im.login({
-                userId,
-                userToken: params.token!,
-                userNickname: nickName,
-                userAvatarURL: avatar,
-                result: (params) => {
-                  console.log('test:zuoyu:login', params);
-                  if (params.isOk) {
-                    setIsLoading(false);
-                    // todo: navigate to HomeScreen
-                    navigation.push('ChannelList', {});
-                  } else {
-                    console.warn('login failed', params.error);
-                    alertRef.current?.alert?.();
-                  }
-                },
-              });
-            } else {
-              console.warn('getLoginToken failed');
-            }
-          },
-        });
-      } else {
-        console.warn('getCurrentUser failed');
-      }
-    });
-  }, [im, navigation]);
+  const loginAction = React.useCallback(
+    (onFinished: (isOk: boolean) => void) => {
+      setIsLoading(true);
+      UserDataManager.getCurrentUser((params) => {
+        console.log('test:zuoyu:getCurrentUser', params);
+        if (params.user) {
+          const { userId, nickName, avatar } = params.user;
+          AppServerClient.getLoginToken({
+            userId,
+            nickName,
+            avatar,
+            onResult: (params) => {
+              console.log('test:zuoyu:getLoginToken', params);
+              if (params.isOk) {
+                im.login({
+                  userId,
+                  userToken: params.token!,
+                  userNickname: nickName,
+                  userAvatarURL: avatar,
+                  result: (params) => {
+                    console.log('test:zuoyu:login', params);
+                    if (params.isOk) {
+                      navigation.replace('ChannelList', {});
+                      onFinished(true);
+                    } else {
+                      console.warn(
+                        'login failed',
+                        params.error,
+                        params.error?.message
+                      );
+                      try {
+                        const json = JSON.parse(params.error?.message || '');
+                        if (json.code === 200) {
+                          console.log('test:zuoyu:login', json);
+                          onFinished(true);
+                          navigation.replace('ChannelList', {});
+                          return;
+                        }
+                      } catch (error) {}
+                      onFinished(false);
+                      alertRef.current?.alert?.();
+                    }
+                  },
+                });
+              } else {
+                console.warn('getLoginToken failed');
+                onFinished(false);
+                alertRef.current?.alert?.();
+              }
+            },
+          });
+        } else {
+          console.warn('getCurrentUser failed');
+          onFinished(false);
+          alertRef.current?.alert?.();
+        }
+      });
+    },
+    [im, navigation]
+  );
   React.useEffect(() => {
-    loginAction();
+    const sub = DeviceEventEmitter.addListener('example_login', () => {
+      loginAction((isOk) => {
+        setIsLoading(!isOk);
+      });
+    });
+    return () => {
+      sub.remove();
+    };
   }, [loginAction]);
+
   return (
     <View style={{ flex: 1 }}>
       {appType === 'agora' ? <Agora /> : <Easemob />}
@@ -87,7 +116,9 @@ export function LoginScreen(props: Props) {
             text: '                 Re-login                 ',
             onPress: () => {
               alertRef.current.close?.();
-              loginAction();
+              loginAction((isOk) => {
+                setIsLoading(!isOk);
+              });
             },
           },
         ]}

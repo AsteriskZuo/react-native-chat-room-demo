@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Keyof } from 'react-native-chat-room/lib/typescript/types';
 import type { ChatRoom } from 'react-native-chat-sdk';
 
-import { avatarUrlBasic, userAvatars, userNickName2 } from '../const';
+import { gAvatarUrlBasic, gUserAvatars, gUserNickName2 } from '../const';
 import { randomId, randomItem } from '../utils/utils';
 
 export type UserData = {
@@ -64,8 +64,8 @@ export class UserDataManager {
   static _createUser(userId: string): UserData {
     return {
       userId: userId,
-      nickName: randomItem(userNickName2),
-      avatar: `${avatarUrlBasic}${randomItem(userAvatars)}`,
+      nickName: randomItem(gUserNickName2),
+      avatar: `${gAvatarUrlBasic}${randomItem(gUserAvatars)}`,
     };
   }
 

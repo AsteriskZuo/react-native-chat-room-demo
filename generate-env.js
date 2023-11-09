@@ -11,10 +11,10 @@ export const isDevMode = true;
 export const appKey = '';
 export const accountType = 'easemob'; // agora or easemob
 export const agoraAppId = '';
-export const avatarUrlBasic = '';
-export const registerUserApi = '';
-export const createRoomApi = '';
-export const getRoomListApi = '';
+export const gAvatarUrlBasic = '';
+export const gRegisterUserUrl = '';
+export const gCreateRoomUrl = '';
+export const gGetRoomListUrl = '';
 export const account = [{ id: '', token: '' }];
 `;
 if (fs.existsSync(file) === false) {

@@ -25,19 +25,18 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
-  BackgroundImageMemo,
+  BackgroundVideoMemo,
   ChatroomMenu,
   ChatroomMenuRef,
   RoomData,
 } from '../common';
-import { gifts, gifts2 } from '../const';
+import { gGifts, gGifts2 } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChatroomScreen(props: Props) {
   const { navigation, route } = props;
   const room = (route.params as any).params.room as RoomData;
-  console.log('test:zuoyu:ChatroomScreen', room);
   const { top } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
   const menuRef = React.useRef<ChatroomMenuRef>({} as any);
@@ -75,18 +74,7 @@ export function ChatroomScreen(props: Props) {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
           if (Platform.OS === 'ios') {
-            let content;
-            try {
-              content = JSON.stringify(params);
-            } catch (error) {
-              content = params.toString();
-            }
-            chatroomRef?.current?.getMarqueeRef()?.pushTask?.({
-              model: {
-                id: seqId('_mq').toString(),
-                content: content,
-              },
-            });
+            ToastAndroid.show(JSON.stringify(params), 3000);
           } else {
             ToastAndroid.show(JSON.stringify(params), 3000);
           }
@@ -94,18 +82,10 @@ export function ChatroomScreen(props: Props) {
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
           if (Platform.OS === 'ios') {
-            let content;
-            try {
-              content = params.event + ':' + params.extra?.toString();
-            } catch (error) {
-              content = params.toString();
-            }
-            chatroomRef?.current?.getMarqueeRef()?.pushTask?.({
-              model: {
-                id: seqId('_mq').toString(),
-                content: content,
-              },
-            });
+            ToastAndroid.show(
+              params.event + ':' + params.extra?.toString(),
+              3000
+            );
           } else {
             ToastAndroid.show(
               params.event + ':' + params.extra?.toString(),
@@ -113,8 +93,12 @@ export function ChatroomScreen(props: Props) {
             );
           }
         },
+        onUserBeKicked: (roomId: string, reason: number) => {
+          console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
+          navigation.goBack();
+        },
       };
-    }, [])
+    }, [navigation])
   );
 
   React.useEffect(() => {
@@ -157,6 +141,10 @@ export function ChatroomScreen(props: Props) {
     });
   };
 
+  const onGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <View
       ref={testRef}
@@ -188,31 +176,11 @@ export function ChatroomScreen(props: Props) {
             },
           },
         }}
-        backgroundView={<BackgroundImageMemo />}
+        backgroundView={<BackgroundVideoMemo />}
         input={{
           props: {
             keyboardVerticalOffset: Platform.OS === 'ios' ? pageY : 0,
             after: [
-              <TouchableOpacity
-                style={{
-                  borderRadius: 38,
-                  backgroundColor: getColor('bg2'),
-                  width: 38,
-                  height: 38,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Icon
-                  name={'ellipsis_vertical'}
-                  resolution={'3x'}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    tintColor: getColor('tintColor'),
-                  }}
-                />
-              </TouchableOpacity>,
               <TouchableOpacity
                 style={{
                   borderRadius: 38,
@@ -246,58 +214,16 @@ export function ChatroomScreen(props: Props) {
         onError={(e) => {
           console.log('ChatroomScreen:onError:2', e.toString());
         }}
-      >
-        <View
-          style={{
-            position: 'absolute',
-            width: 150,
-            height: 300,
-            top: 150,
-            right: 20,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              height: 30,
-              width: 150,
-              backgroundColor: '#fff8dc',
-              borderRadius: 20,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              addMarqueeTask();
-            }}
-          >
-            <Text>{'add import message'}</Text>
-          </TouchableOpacity>
-          <View style={{ height: 1 }} />
-          <TouchableOpacity
-            style={{
-              height: 30,
-              width: 150,
-              backgroundColor: '#fff8dc',
-              borderRadius: 20,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              addGiftEffectTask();
-            }}
-          >
-            <Text>{'add gift message'}</Text>
-          </TouchableOpacity>
-        </View>
-      </Chatroom>
+      />
       <BottomSheetGift2
         ref={giftRef}
         maskStyle={{ transform: [{ translateY: -pageY }] }}
         gifts={[
-          { title: 'gift1', gifts },
-          { title: 'gift2', gifts: gifts2 },
+          { title: 'gift1', gifts: gGifts },
+          { title: 'gift2', gifts: gGifts2 },
         ]}
         onSend={(giftId) => {
-          for (const gift of gifts) {
+          for (const gift of gGifts) {
             if (gift.giftId === giftId) {
               if (im.roomState === 'joined') {
                 im.sendGift({
@@ -350,13 +276,15 @@ export function ChatroomScreen(props: Props) {
         addMarqueeTask={addMarqueeTask}
         showMemberList={showMemberList}
       />
-      <ChatroomHeader {...props} />
+      <ChatroomHeader {...props} onGoBack={onGoBack} />
     </View>
   );
 }
 
-export const ChatroomHeader = (props: Props): React.ReactElement => {
-  const { navigation, route } = props;
+export const ChatroomHeader = (
+  props: Props & { onGoBack: () => void }
+): React.ReactElement => {
+  const { route, onGoBack } = props;
   const room = (route.params as any).params.room as RoomData;
   const { top } = useSafeAreaInsets();
   const { emit } = useDispatchContext();
@@ -399,9 +327,7 @@ export const ChatroomHeader = (props: Props): React.ReactElement => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onTouchEnd={() => {
-          navigation.goBack();
-        }}
+        onTouchEnd={onGoBack}
       >
         <Icon
           name={'chevron_left'}

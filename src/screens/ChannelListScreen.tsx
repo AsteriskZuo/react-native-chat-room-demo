@@ -1,6 +1,11 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { DeviceEventEmitter, FlatList } from 'react-native';
+import {
+  DeviceEventEmitter,
+  FlatList,
+  Platform,
+  ToastAndroid,
+} from 'react-native';
 import { Text, View } from 'react-native';
 import {
   Avatar,
@@ -10,6 +15,7 @@ import {
   Switch,
   useColors,
   useIMContext,
+  useIMListener,
   useLifecycle,
   usePaletteContext,
 } from 'react-native-chat-room';
@@ -26,10 +32,11 @@ import { randomCover } from '../utils/utils';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChannelListScreen(props: Props) {
-  const {} = props;
+  const { navigation } = props;
   const [isStop, setIsStop] = React.useState(true);
   const dataRef = React.useRef<{ id: string; room: RoomData }[]>([]);
   const [data, setData] = React.useState(dataRef.current);
+  const roomRef = React.useRef<RoomData | undefined>(undefined);
   const [value, onValueChange] = React.useState(false);
   const [user, setUser] = React.useState<UserData | undefined>(undefined);
   const im = useIMContext();
@@ -103,6 +110,66 @@ export function ChannelListScreen(props: Props) {
     )
   );
 
+  const onLeaveRoom = React.useCallback(async () => {
+    if (im.userId === roomRef.current?.owner) {
+      if (roomRef.current === undefined) {
+        return;
+      }
+      AppServerClient.removeRoom({
+        roomId: roomRef.current.roomId,
+        token: await im.client.getAccessToken(),
+        onResult: (params) => {
+          if (params.isOk) {
+            if (params.roomId) {
+              dataRef.current = dataRef.current.filter(
+                (item) => item.id !== params.roomId
+              );
+              setData([...dataRef.current]);
+            }
+          }
+        },
+      });
+      im.client.roomManager
+        .destroyChatRoom(roomRef.current?.roomId ?? '')
+        .catch((e) => {
+          console.warn('dev:destroyChatRoom:', e);
+        });
+    }
+  }, [im.client, im.userId]);
+
+  useIMListener(
+    React.useMemo(() => {
+      return {
+        onError: (params) => {
+          console.log('ChannelListScreen:onError:', JSON.stringify(params));
+          if (Platform.OS === 'ios') {
+            // todo: ios
+            ToastAndroid.show(JSON.stringify(params), 3000);
+          } else {
+            ToastAndroid.show(JSON.stringify(params), 3000);
+          }
+        },
+        onFinished: (params) => {
+          console.log('ChannelListScreen:onFinished:', params);
+          if (Platform.OS === 'ios') {
+            ToastAndroid.show(
+              params.event + ':' + params.extra?.toString(),
+              3000
+            );
+          } else {
+            ToastAndroid.show(
+              params.event + ':' + params.extra?.toString(),
+              3000
+            );
+          }
+          if (params.event === 'leave') {
+            onLeaveRoom();
+          }
+        },
+      };
+    }, [onLeaveRoom])
+  );
+
   useLifecycle(
     React.useCallback(async (state) => {
       if (state === 'load') {
@@ -115,6 +182,46 @@ export function ChannelListScreen(props: Props) {
       }
     }, [])
   );
+
+  const createRoom = async () => {
+    const loginState = await im.loginState();
+    if (loginState !== 'logged') {
+      console.log('dev:createRoom:loginState:', loginState);
+      return;
+    }
+    if (im.userId === undefined) {
+      console.log('dev:createRoom:userId:', loginState);
+      return;
+    }
+    const user = im.getUserInfo(im.userId);
+    if (user === undefined) {
+      console.log('dev:createRoom:user:', loginState);
+      return;
+    }
+    AppServerClient.createRoom({
+      token: await im.client.getAccessToken(),
+      roomName: `${user.nickName ?? user.userId}的直播间`,
+      roomOwnerId: im.userId,
+      onResult: (params) => {
+        if (params.isOk) {
+          if (params.room) {
+            dataRef.current.push({
+              id: params.room.roomId,
+              room: params.room,
+            });
+            setData([...dataRef.current]);
+
+            enterRoom(params.room);
+          }
+        }
+      },
+    });
+  };
+
+  const enterRoom = (room: RoomData) => {
+    roomRef.current = room;
+    navigation.push('Chatroom', { params: { room } });
+  };
 
   return (
     <View
@@ -194,11 +301,7 @@ export function ChannelListScreen(props: Props) {
                   id={info.item.id}
                   room={info.item.room}
                   onResult={(room) => {
-                    props.navigation.push('Chatroom', {
-                      params: {
-                        room,
-                      },
-                    });
+                    enterRoom(room);
                   }}
                 />
               );
@@ -236,6 +339,7 @@ export function ChannelListScreen(props: Props) {
             contentType={'icon-text'}
             text={'Create'}
             icon={'video_camera_splus'}
+            onPress={createRoom}
           />
         </View>
       </SafeAreaView>

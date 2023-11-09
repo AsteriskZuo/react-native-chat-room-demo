@@ -1,6 +1,6 @@
 import type { GiftListModel } from 'react-native-chat-room';
 
-export const userNickName1: string[] = [
+export const gUserNickName1: string[] = [
   'Ethan',
   'Emma',
   'Noah',
@@ -152,7 +152,7 @@ export const userNickName1: string[] = [
   'Jordan',
   'Lydia',
 ];
-export const userNickName2: string[] = [
+export const gUserNickName2: string[] = [
   '左冷禅',
   '朱聪',
   '拜月',
@@ -304,7 +304,7 @@ export const userNickName2: string[] = [
   '陈家洛',
   '花无缺',
 ];
-export const userAvatars: string[] = [
+export const gUserAvatars: string[] = [
   'fc14ab00-79f7-11ee-93f4-618a64affe88',
   '7345d230-79f8-11ee-a0d1-5f74d88fa308',
   '7d239bc0-79f8-11ee-92b9-770b4e48f8fc',
@@ -328,19 +328,25 @@ export const userAvatars: string[] = [
   '298c9240-79f9-11ee-b8b6-f16f0b5f700a',
 ];
 
-export const avatarUrlBasic =
+export const gAvatarUrlBasic =
   'https://a1.easemob.com/easemob/chatroom-uikit/chatfiles/';
 
-export const registerUserApi =
+export const gRegisterUserUrl =
   'https://a1.easemob.com/internal/appserver/liverooms/user/login';
 
-export const createRoomApi =
+export const gCreateRoomUrl =
   'https://a1.easemob.com/internal/appserver/liverooms/';
 
-export const getRoomListApi =
+export const gGetRoomListUrl =
   'https://a1.easemob.com/internal/appserver/liverooms';
 
-export const gifts: GiftListModel[] = [
+export const gSendBroadcastUrl =
+  'https://a1.easemob.com/internal/appserver/liverooms/broadcast';
+
+export const gRemoveRoomUrl =
+  'https://a1.easemob.com/internal/appserver/liverooms/';
+
+export const gGifts: GiftListModel[] = [
   {
     giftId: '2665752a-e273-427c-ac5a-4b2a9c82b255',
     giftIcon:
@@ -435,4 +441,4 @@ export const gifts: GiftListModel[] = [
     effectMD5: 'de5094b30eebeadf8b8f5d8357a19578',
   },
 ];
-export const gifts2 = gifts.slice(0, gifts.length - 1);
+export const gGifts2 = gGifts.slice(0, gGifts.length - 1);

@@ -18,7 +18,7 @@ export const BackgroundImage = () => {
     >
       <ImageBackground
         resizeMode={'cover'}
-        source={style === 'light' ? assert.lightImage : assert.darkImage}
+        source={style === 'light' ? assert.a_lightImage : assert.a_darkImage}
         // style={{ width: '100%', height: '100%' }}
         style={{ width: winWidth, height: winHeight }}
       />

@@ -80,7 +80,6 @@ export function App() {
       return;
     }
     isReadyRef.current = true;
-    console.log('test:zuoyu:onReady:');
     // navigationRef?.navigate('Login', {});
     DeviceEventEmitter.emit('example_login', {});
   };
@@ -93,7 +92,7 @@ export function App() {
         palette={palette}
         theme={theme}
         roomOption={{ marquee: { isVisible: true } }}
-        language={'fr'}
+        language={'zh-Hans'}
         onInitialized={() => {
           console.log('dev:onInitialized:');
           isContainerReadyRef.current = true;

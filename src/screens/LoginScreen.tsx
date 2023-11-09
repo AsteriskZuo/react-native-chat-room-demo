@@ -13,7 +13,6 @@ import type { RootScreenParamsList } from '../routes';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function LoginScreen(props: Props) {
-  console.log('test:zuoyu:LoginScreen');
   const { navigation } = props;
   const appType = require('../env').accountType;
   const im = useIMContext();
@@ -23,7 +22,6 @@ export function LoginScreen(props: Props) {
     (onFinished: (isOk: boolean) => void) => {
       setIsLoading(true);
       UserDataManager.getCurrentUser((params) => {
-        console.log('test:zuoyu:getCurrentUser', params);
         if (params.user) {
           const { userId, nickName, avatar } = params.user;
           AppServerClient.getLoginToken({
@@ -31,7 +29,6 @@ export function LoginScreen(props: Props) {
             nickName,
             avatar,
             onResult: (params) => {
-              console.log('test:zuoyu:getLoginToken', params);
               if (params.isOk) {
                 im.login({
                   userId,
@@ -39,7 +36,6 @@ export function LoginScreen(props: Props) {
                   userNickname: nickName,
                   userAvatarURL: avatar,
                   result: (params) => {
-                    console.log('test:zuoyu:login', params);
                     if (params.isOk) {
                       navigation.replace('ChannelList', {});
                       onFinished(true);
@@ -52,7 +48,6 @@ export function LoginScreen(props: Props) {
                       try {
                         const json = JSON.parse(params.error?.message || '');
                         if (json.code === 200) {
-                          console.log('test:zuoyu:login', json);
                           onFinished(true);
                           navigation.replace('ChannelList', {});
                           return;

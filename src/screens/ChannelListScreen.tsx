@@ -20,6 +20,7 @@ import {
   usePaletteContext,
 } from 'react-native-chat-room';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import {
   AppServerClient,
@@ -143,8 +144,7 @@ export function ChannelListScreen(props: Props) {
         onError: (params) => {
           console.log('ChannelListScreen:onError:', JSON.stringify(params));
           if (Platform.OS === 'ios') {
-            // todo: ios
-            ToastAndroid.show(JSON.stringify(params), 3000);
+            Toast.show({ text1: JSON.stringify(params), visibilityTime: 3000 });
           } else {
             ToastAndroid.show(JSON.stringify(params), 3000);
           }
@@ -152,10 +152,10 @@ export function ChannelListScreen(props: Props) {
         onFinished: (params) => {
           console.log('ChannelListScreen:onFinished:', params);
           if (Platform.OS === 'ios') {
-            ToastAndroid.show(
-              params.event + ':' + params.extra?.toString(),
-              3000
-            );
+            Toast.show({
+              text1: params.event + ':' + params.extra?.toString(),
+              visibilityTime: 3000,
+            });
           } else {
             ToastAndroid.show(
               params.event + ':' + params.extra?.toString(),
@@ -190,12 +190,12 @@ export function ChannelListScreen(props: Props) {
       return;
     }
     if (im.userId === undefined) {
-      console.log('dev:createRoom:userId:', loginState);
+      console.log('dev:createRoom:userId:', im.userId);
       return;
     }
     const user = im.getUserInfo(im.userId);
     if (user === undefined) {
-      console.log('dev:createRoom:user:', loginState);
+      console.log('dev:createRoom:user:', im.userId);
       return;
     }
     AppServerClient.createRoom({
@@ -203,6 +203,7 @@ export function ChannelListScreen(props: Props) {
       roomName: `${user.nickName ?? user.userId}的直播间`,
       roomOwnerId: im.userId,
       onResult: (params) => {
+        console.log('test:zuoyu:createRoom:', params);
         if (params.isOk) {
           if (params.room) {
             dataRef.current.push({

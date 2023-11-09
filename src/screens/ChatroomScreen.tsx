@@ -17,19 +17,14 @@ import {
   IconButton,
   seqId,
   useColors,
-  useDispatchContext,
   useIMContext,
   useIMListener,
   usePaletteContext,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
-import {
-  BackgroundVideoMemo,
-  ChatroomMenu,
-  ChatroomMenuRef,
-  RoomData,
-} from '../common';
+import { BackgroundVideoMemo, RoomData } from '../common';
 import { gGifts, gGifts2 } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
@@ -39,11 +34,9 @@ export function ChatroomScreen(props: Props) {
   const room = (route.params as any).params.room as RoomData;
   const { top } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
-  const menuRef = React.useRef<ChatroomMenuRef>({} as any);
   const chatroomRef = React.useRef<Chatroom>({} as any);
   const giftRef = React.useRef<BottomSheetGiftSimuRef>({} as any);
   const im = useIMContext();
-  const count = React.useRef(0);
   const { colors } = usePaletteContext();
   const { width: winWidth } = useWindowDimensions();
   const { getColor } = useColors({
@@ -66,7 +59,6 @@ export function ChatroomScreen(props: Props) {
   });
 
   const [pageY, setPageY] = React.useState(0);
-  const { addListener, removeListener } = useDispatchContext();
 
   useIMListener(
     React.useMemo(() => {
@@ -74,7 +66,7 @@ export function ChatroomScreen(props: Props) {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
           if (Platform.OS === 'ios') {
-            ToastAndroid.show(JSON.stringify(params), 3000);
+            Toast.show({ text1: JSON.stringify(params), visibilityTime: 3000 });
           } else {
             ToastAndroid.show(JSON.stringify(params), 3000);
           }
@@ -82,10 +74,10 @@ export function ChatroomScreen(props: Props) {
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
           if (Platform.OS === 'ios') {
-            ToastAndroid.show(
-              params.event + ':' + params.extra?.toString(),
-              3000
-            );
+            Toast.show({
+              text1: params.event + ':' + params.extra?.toString(),
+              visibilityTime: 3000,
+            });
           } else {
             ToastAndroid.show(
               params.event + ':' + params.extra?.toString(),
@@ -101,48 +93,12 @@ export function ChatroomScreen(props: Props) {
     }, [navigation])
   );
 
-  React.useEffect(() => {
-    const cb = () => {
-      menuRef?.current?.startShow?.();
-    };
-    addListener(`_$${ChatroomHeader?.name}`, cb);
-    return () => {
-      removeListener(`_$${ChatroomHeader?.name}`, cb);
-    };
-  }, [addListener, removeListener]);
-
-  const addGiftEffectTask = () => {
-    chatroomRef?.current?.getGiftEffectRef()?.pushTask({
-      model: {
-        id: seqId('_gf').toString(),
-        nickName: 'NickName',
-        giftCount: 1,
-        giftIcon: 'http://notext.png',
-        content: 'send Agoraship',
-      },
-    });
-  };
-  const addMarqueeTask = () => {
-    const content =
-      'For several generations, stories from Africa have traditionally been passed down by word of mouth. ';
-    const content2 = "I'm fine.";
-    chatroomRef?.current?.getMarqueeRef()?.pushTask?.({
-      model: {
-        id: count.current.toString(),
-        content: count.current % 2 === 0 ? content : content2,
-      },
-    });
-    ++count.current;
-  };
-
-  const showMemberList = () => {
-    menuRef?.current?.startHide?.(() => {
-      chatroomRef?.current?.getMemberListRef()?.startShow();
-    });
-  };
-
   const onGoBack = () => {
     navigation.goBack();
+  };
+
+  const onRequestMemberList = () => {
+    chatroomRef?.current?.getMemberListRef()?.startShow();
   };
 
   return (
@@ -267,27 +223,21 @@ export function ChatroomScreen(props: Props) {
           }
         }}
       />
-      <ChatroomMenu
-        ref={menuRef}
-        onRequestModalClose={() => {
-          menuRef?.current?.startHide?.();
-        }}
-        addGiftEffectTask={addGiftEffectTask}
-        addMarqueeTask={addMarqueeTask}
-        showMemberList={showMemberList}
+      <ChatroomHeader
+        {...props}
+        onGoBack={onGoBack}
+        onRequestMemberList={onRequestMemberList}
       />
-      <ChatroomHeader {...props} onGoBack={onGoBack} />
     </View>
   );
 }
 
 export const ChatroomHeader = (
-  props: Props & { onGoBack: () => void }
+  props: Props & { onGoBack: () => void; onRequestMemberList: () => void }
 ): React.ReactElement => {
-  const { route, onGoBack } = props;
+  const { route, onGoBack, onRequestMemberList } = props;
   const room = (route.params as any).params.room as RoomData;
   const { top } = useSafeAreaInsets();
-  const { emit } = useDispatchContext();
   const { colors } = usePaletteContext();
   const { getColor } = useColors({
     return: {
@@ -384,9 +334,7 @@ export const ChatroomHeader = (
           alignItems: 'center',
           backgroundColor: getColor('bg'),
         }}
-        onTouchEnd={() => {
-          emit(`_$${ChatroomHeader.name}`, {});
-        }}
+        onTouchEnd={onRequestMemberList}
       >
         <IconButton
           iconName={'person_double_fill'}

@@ -16,13 +16,14 @@ import {
   Icon,
   IconButton,
   seqId,
+  SimpleToast,
+  SimpleToastRef,
   useColors,
   useIMContext,
   useIMListener,
   usePaletteContext,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Toast from 'react-native-toast-message';
 
 import { BackgroundVideoMemo, RoomData } from '../common';
 import { gGifts, gGifts2 } from '../const';
@@ -35,6 +36,7 @@ export function ChatroomScreen(props: Props) {
   const { top } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
   const chatroomRef = React.useRef<Chatroom>({} as any);
+  const toastRef = React.useRef<SimpleToastRef>({} as any);
   const giftRef = React.useRef<BottomSheetGiftSimuRef>({} as any);
   const im = useIMContext();
   const { colors } = usePaletteContext();
@@ -66,7 +68,10 @@ export function ChatroomScreen(props: Props) {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
           if (Platform.OS === 'ios') {
-            Toast.show({ text1: JSON.stringify(params), visibilityTime: 3000 });
+            toastRef.current.show({
+              message: JSON.stringify(params),
+              timeout: 3000,
+            });
           } else {
             ToastAndroid.show(JSON.stringify(params), 3000);
           }
@@ -74,9 +79,9 @@ export function ChatroomScreen(props: Props) {
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
           if (Platform.OS === 'ios') {
-            Toast.show({
-              text1: params.event + ':' + params.extra?.toString(),
-              visibilityTime: 3000,
+            toastRef.current.show({
+              message: params.event + ':' + params.extra?.toString(),
+              timeout: 3000,
             });
           } else {
             ToastAndroid.show(
@@ -228,6 +233,7 @@ export function ChatroomScreen(props: Props) {
         onGoBack={onGoBack}
         onRequestMemberList={onRequestMemberList}
       />
+      <SimpleToast propsRef={toastRef} />
     </View>
   );
 }

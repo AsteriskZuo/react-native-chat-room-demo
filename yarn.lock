@@ -7876,9 +7876,9 @@ react-is@^17.0.1:
   resolved "https://registry.npmmirror.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#b22d2d375a691872664933d4dd8d05848f5b1dc9":
+"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#0fc12bfeff2270c56a1e510dcbe427920c9bd152":
   version "0.1.0"
-  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#b22d2d375a691872664933d4dd8d05848f5b1dc9"
+  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#0fc12bfeff2270c56a1e510dcbe427920c9bd152"
 
 react-native-chat-sdk@1.2.2-beta.0:
   version "1.2.2-beta.0"
@@ -7917,11 +7917,6 @@ react-native-screens@~3.20.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
-
-react-native-toast-message@^2.1.7:
-  version "2.1.7"
-  resolved "https://registry.npmmirror.com/react-native-toast-message/-/react-native-toast-message-2.1.7.tgz#480ead6ea23e884f50ba467c818337d6830341e5"
-  integrity sha512-5zX3T5buVpg4bn9KZYVZ2VUQiLQZ1FHSM2AFQHVpgeKMYb+Gq+jt7wjhfPqhuMkJElQr7XNrnRw/rBCdD+7Q9w==
 
 react-native@0.71.14:
   version "0.71.14"

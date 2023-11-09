@@ -12,6 +12,8 @@ import {
   CmnButton,
   Image,
   LoadingIcon,
+  SimpleToast,
+  SimpleToastRef,
   Switch,
   useColors,
   useIMContext,
@@ -20,7 +22,6 @@ import {
   usePaletteContext,
 } from 'react-native-chat-room';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Toast from 'react-native-toast-message';
 
 import {
   AppServerClient,
@@ -38,6 +39,7 @@ export function ChannelListScreen(props: Props) {
   const dataRef = React.useRef<{ id: string; room: RoomData }[]>([]);
   const [data, setData] = React.useState(dataRef.current);
   const roomRef = React.useRef<RoomData | undefined>(undefined);
+  const toastRef = React.useRef<SimpleToastRef>({} as any);
   const [value, onValueChange] = React.useState(false);
   const [user, setUser] = React.useState<UserData | undefined>(undefined);
   const im = useIMContext();
@@ -144,7 +146,7 @@ export function ChannelListScreen(props: Props) {
         onError: (params) => {
           console.log('ChannelListScreen:onError:', JSON.stringify(params));
           if (Platform.OS === 'ios') {
-            Toast.show({ text1: JSON.stringify(params), visibilityTime: 3000 });
+            toastRef.current.show({ message: JSON.stringify(params) });
           } else {
             ToastAndroid.show(JSON.stringify(params), 3000);
           }
@@ -152,9 +154,8 @@ export function ChannelListScreen(props: Props) {
         onFinished: (params) => {
           console.log('ChannelListScreen:onFinished:', params);
           if (Platform.OS === 'ios') {
-            Toast.show({
-              text1: params.event + ':' + params.extra?.toString(),
-              visibilityTime: 3000,
+            toastRef.current.show({
+              message: params.event + ':' + params.extra?.toString(),
             });
           } else {
             ToastAndroid.show(
@@ -344,6 +345,7 @@ export function ChannelListScreen(props: Props) {
           />
         </View>
       </SafeAreaView>
+      <SimpleToast propsRef={toastRef} />
     </View>
   );
 }

@@ -13,7 +13,6 @@ import {
   useLightTheme,
   usePresetPalette,
 } from 'react-native-chat-room';
-import Toast from 'react-native-toast-message';
 
 import type { RootParamsList, RootParamsName } from './routes';
 import {
@@ -173,7 +172,6 @@ export function App() {
         </NavigationContainer>
       </Container>
       {/* {isReady === false ? <SplashScreen /> : null} */}
-      <Toast />
     </React.StrictMode>
   );
 }

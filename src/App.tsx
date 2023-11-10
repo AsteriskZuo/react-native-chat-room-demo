@@ -14,6 +14,7 @@ import {
   usePresetPalette,
 } from 'react-native-chat-room';
 
+import { createStringSetCn, createStringSetEn } from './common';
 import type { RootParamsList, RootParamsName } from './routes';
 import {
   ChannelListScreen,
@@ -93,6 +94,13 @@ export function App() {
         theme={theme}
         roomOption={{ marquee: { isVisible: true } }}
         language={'zh-Hans'}
+        languageExtensionFactory={(language) => {
+          if (language === 'zh-Hans') {
+            return createStringSetCn();
+          } else {
+            return createStringSetEn();
+          }
+        }}
         onInitialized={() => {
           console.log('dev:onInitialized:');
           isContainerReadyRef.current = true;

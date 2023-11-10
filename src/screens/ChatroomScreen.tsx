@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 import {
+  Alert,
+  AlertRef,
   Avatar,
   BottomSheetGift2,
   BottomSheetGiftSimuRef,
@@ -19,13 +21,19 @@ import {
   SimpleToast,
   SimpleToastRef,
   useColors,
+  useI18nContext,
   useIMContext,
   useIMListener,
   usePaletteContext,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BackgroundVideoMemo, RoomData } from '../common';
+import {
+  BackgroundVideoMemo,
+  RoomData,
+  useOnErrorParser,
+  useOnFinishedParser,
+} from '../common';
 import { gGifts, gGifts2 } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
@@ -35,6 +43,7 @@ export function ChatroomScreen(props: Props) {
   const room = (route.params as any).params.room as RoomData;
   const { top } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
+  const alertRef = React.useRef<AlertRef>({} as any);
   const chatroomRef = React.useRef<Chatroom>({} as any);
   const toastRef = React.useRef<SimpleToastRef>({} as any);
   const giftRef = React.useRef<BottomSheetGiftSimuRef>({} as any);
@@ -47,12 +56,12 @@ export function ChatroomScreen(props: Props) {
       dark: colors.neutral[1],
     },
     bg2: {
-      light: colors.barrage[2],
-      dark: colors.barrage[2],
+      light: colors.barrage.onLight[2],
+      dark: colors.barrage.onDark[2],
     },
     tintColor: {
-      light: colors.barrage[8],
-      dark: colors.barrage[8],
+      light: colors.neutral[98],
+      dark: colors.neutral[98],
     },
     marquee: {
       light: '#FF6680',
@@ -61,45 +70,69 @@ export function ChatroomScreen(props: Props) {
   });
 
   const [pageY, setPageY] = React.useState(0);
+  const { parseError } = useOnErrorParser();
+  const { parseFinished } = useOnFinishedParser();
+  const { tr } = useI18nContext();
 
   useIMListener(
     React.useMemo(() => {
       return {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
-          if (Platform.OS === 'ios') {
-            toastRef.current.show({
-              message: JSON.stringify(params),
-              timeout: 3000,
-            });
-          } else {
-            ToastAndroid.show(JSON.stringify(params), 3000);
+          const ret = parseError(params.error);
+          if (ret) {
+            if (Platform.OS === 'ios') {
+              toastRef.current.show({
+                message: ret,
+                timeout: 3000,
+              });
+            } else {
+              ToastAndroid.show(ret, 3000);
+            }
           }
         },
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
-          if (Platform.OS === 'ios') {
-            toastRef.current.show({
-              message: params.event + ':' + params.extra?.toString(),
-              timeout: 3000,
-            });
-          } else {
-            ToastAndroid.show(
-              params.event + ':' + params.extra?.toString(),
-              3000
-            );
+          const ret = parseFinished(params.event);
+          if (ret) {
+            if (Platform.OS === 'ios') {
+              toastRef.current.show({
+                message: ret,
+                timeout: 3000,
+              });
+            } else {
+              ToastAndroid.show(ret, 3000);
+            }
           }
         },
         onUserBeKicked: (roomId: string, reason: number) => {
           console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
           navigation.goBack();
         },
+        onUserMuted: (roomId, userIds, operatorId) => {
+          console.log(
+            'ChatroomScreen:onUserMuted:',
+            roomId,
+            userIds,
+            operatorId
+          );
+          tr('beMuted');
+        },
+        onUserUnmuted: (roomId, userIds, operatorId) => {
+          console.log(
+            'ChatroomScreen:onUserUnmuted:',
+            roomId,
+            userIds,
+            operatorId
+          );
+          tr('beUnmuted');
+        },
       };
-    }, [navigation])
+    }, [navigation, parseError, parseFinished, tr])
   );
 
   const onGoBack = () => {
-    navigation.goBack();
+    alertRef.current.alert?.();
   };
 
   const onRequestMemberList = () => {
@@ -234,6 +267,26 @@ export function ChatroomScreen(props: Props) {
         onRequestMemberList={onRequestMemberList}
       />
       <SimpleToast propsRef={toastRef} />
+      <Alert
+        ref={alertRef}
+        title={tr('leaveRoom')}
+        buttons={[
+          {
+            text: tr('Cancel'),
+            onPress: () => {
+              alertRef.current.close?.();
+            },
+          },
+          {
+            text: tr('Confirm'),
+            onPress: () => {
+              alertRef.current.close?.(() => {
+                navigation.goBack();
+              });
+            },
+          },
+        ]}
+      />
     </View>
   );
 }
@@ -243,6 +296,7 @@ export const ChatroomHeader = (
 ): React.ReactElement => {
   const { route, onGoBack, onRequestMemberList } = props;
   const room = (route.params as any).params.room as RoomData;
+  const {} = useI18nContext();
   const { top } = useSafeAreaInsets();
   const { colors } = usePaletteContext();
   const { getColor } = useColors({

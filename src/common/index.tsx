@@ -4,3 +4,6 @@ export * from './BackgroundImage';
 export * from './BackgroundVideo';
 export * from './data';
 export * from './Easemob';
+export * from './StringSet.cn';
+export * from './StringSet.en';
+export * from './useToastParser';

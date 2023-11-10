@@ -7876,14 +7876,14 @@ react-is@^17.0.1:
   resolved "https://registry.npmmirror.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#0fc12bfeff2270c56a1e510dcbe427920c9bd152":
+"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#ae1bfe1016f4e03c465c9ef4ba9ca8c1a524f2ee":
   version "0.1.0"
-  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#0fc12bfeff2270c56a1e510dcbe427920c9bd152"
+  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#ae1bfe1016f4e03c465c9ef4ba9ca8c1a524f2ee"
 
-react-native-chat-sdk@1.2.2-beta.0:
-  version "1.2.2-beta.0"
-  resolved "https://registry.npmmirror.com/react-native-chat-sdk/-/react-native-chat-sdk-1.2.2-beta.0.tgz#628b025e215a6eadc525acdee34b94ab262848f4"
-  integrity sha512-sm9FPcfEHZK/Z1qinrH5iaJnkTPFBF1xCa1UYcONRrPeBbjtoi+8oTL/kRhSgqS6nfABgGFR9ckY4a2nV5KQbg==
+react-native-chat-sdk@1.2.2-beta.1:
+  version "1.2.2-beta.1"
+  resolved "https://registry.npmmirror.com/react-native-chat-sdk/-/react-native-chat-sdk-1.2.2-beta.1.tgz#0cc6af0efd697337901ab532fa483a820bcdd3ec"
+  integrity sha512-5Ck6WdnjarWqwafPa/9VEKJbpAInRXcuPriX6HUsHY8w5rro6dLN8m4x4ZYK7fVIcwm0XW8+UKgQqTpo3j0Hrw==
 
 react-native-codegen@^0.71.6:
   version "0.71.6"

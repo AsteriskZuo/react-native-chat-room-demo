@@ -16,6 +16,7 @@ import {
   SimpleToastRef,
   Switch,
   useColors,
+  useI18nContext,
   useIMContext,
   useIMListener,
   useLifecycle,
@@ -26,6 +27,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   AppServerClient,
   RoomData,
+  useOnErrorParser,
+  useOnFinishedParser,
   UserData,
   UserDataManager,
 } from '../common';
@@ -62,6 +65,9 @@ export function ChannelListScreen(props: Props) {
       dark: colors.neutral[7],
     },
   });
+  const { parseError } = useOnErrorParser();
+  const { parseFinished } = useOnFinishedParser();
+  const { tr } = useI18nContext();
 
   const request = React.useCallback(
     async (finished?: () => void) => {
@@ -144,31 +150,42 @@ export function ChannelListScreen(props: Props) {
     React.useMemo(() => {
       return {
         onError: (params) => {
-          console.log('ChannelListScreen:onError:', JSON.stringify(params));
-          if (Platform.OS === 'ios') {
-            toastRef.current.show({ message: JSON.stringify(params) });
-          } else {
-            ToastAndroid.show(JSON.stringify(params), 3000);
+          console.log('ChatroomScreen:onError:', JSON.stringify(params));
+          const ret = parseError(params.error);
+          if (ret) {
+            if (Platform.OS === 'ios') {
+              toastRef.current.show({
+                message: ret,
+                timeout: 3000,
+              });
+            } else {
+              ToastAndroid.show(ret, 3000);
+            }
           }
         },
         onFinished: (params) => {
-          console.log('ChannelListScreen:onFinished:', params);
-          if (Platform.OS === 'ios') {
-            toastRef.current.show({
-              message: params.event + ':' + params.extra?.toString(),
-            });
-          } else {
-            ToastAndroid.show(
-              params.event + ':' + params.extra?.toString(),
-              3000
-            );
+          console.log('ChatroomScreen:onFinished:', params);
+          const ret = parseFinished(params.event);
+          if (ret) {
+            if (Platform.OS === 'ios') {
+              toastRef.current.show({
+                message: ret,
+                timeout: 3000,
+              });
+            } else {
+              ToastAndroid.show(ret, 3000);
+            }
           }
           if (params.event === 'leave') {
             onLeaveRoom();
           }
         },
+        onUserBeKicked: (roomId: string, reason: number) => {
+          console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
+          tr('beRemove');
+        },
       };
-    }, [onLeaveRoom])
+    }, [onLeaveRoom, parseError, parseFinished, tr])
   );
 
   useLifecycle(
@@ -201,10 +218,9 @@ export function ChannelListScreen(props: Props) {
     }
     AppServerClient.createRoom({
       token: await im.client.getAccessToken(),
-      roomName: `${user.nickName ?? user.userId}的直播间`,
+      roomName: tr('channelListName', user.nickName ?? user.userId),
       roomOwnerId: im.userId,
       onResult: (params) => {
-        console.log('test:zuoyu:createRoom:', params);
         if (params.isOk) {
           if (params.room) {
             dataRef.current.push({
@@ -253,7 +269,7 @@ export function ChannelListScreen(props: Props) {
               color: getColor('text1'),
             }}
           >
-            {'Channel list'}
+            {tr('channelList')}
           </Text>
           <View
             style={{ marginHorizontal: 10 }}

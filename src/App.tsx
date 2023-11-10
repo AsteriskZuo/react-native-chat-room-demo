@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { DeviceEventEmitter, View } from 'react-native';
+import { Appearance, DeviceEventEmitter, View } from 'react-native';
 import {
   Container,
   useDarkTheme,
@@ -71,6 +71,15 @@ export function App() {
       ret.remove();
     };
   }, [dark, light]);
+
+  Appearance.addChangeListener((e) => {
+    console.log('dev:Appearance:', e.colorScheme);
+    if (e.colorScheme === 'dark') {
+      setTheme(dark);
+    } else {
+      setTheme(light);
+    }
+  });
 
   const onReady = async (_isReady: boolean) => {
     // setTimeout(() => {

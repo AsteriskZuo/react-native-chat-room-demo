@@ -5,7 +5,6 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from 'react-native';
 import {
@@ -22,9 +21,9 @@ import {
   SimpleToastRef,
   useColors,
   useI18nContext,
-  useIMContext,
-  useIMListener,
   usePaletteContext,
+  useRoomContext,
+  useRoomListener,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -47,9 +46,8 @@ export function ChatroomScreen(props: Props) {
   const chatroomRef = React.useRef<Chatroom>({} as any);
   const toastRef = React.useRef<SimpleToastRef>({} as any);
   const giftRef = React.useRef<BottomSheetGiftSimuRef>({} as any);
-  const im = useIMContext();
+  const im = useRoomContext();
   const { colors } = usePaletteContext();
-  const { width: winWidth } = useWindowDimensions();
   const { getColor } = useColors({
     bg: {
       light: colors.neutral[98],
@@ -74,7 +72,7 @@ export function ChatroomScreen(props: Props) {
   const { parseFinished } = useOnFinishedParser();
   const { tr } = useI18nContext();
 
-  useIMListener(
+  useRoomListener(
     React.useMemo(() => {
       return {
         onError: (params) => {
@@ -136,7 +134,7 @@ export function ChatroomScreen(props: Props) {
   };
 
   const onRequestMemberList = () => {
-    chatroomRef?.current?.getMemberListRef()?.startShow();
+    chatroomRef?.current?.getParticipantListRef()?.startShow();
   };
 
   return (
@@ -160,13 +158,13 @@ export function ChatroomScreen(props: Props) {
     >
       <Chatroom
         ref={chatroomRef}
-        marquee={{
+        globalBroadcast={{
           props: {
             containerStyle: {
               marginLeft: 12,
-              width: winWidth - 24,
+              // width: winWidth - 24,
               marginTop: 8 + top + 44,
-              backgroundColor: getColor('marquee'),
+              // backgroundColor: getColor('marquee'),
             },
           },
         }}
@@ -196,7 +194,7 @@ export function ChatroomScreen(props: Props) {
             ],
           },
         }}
-        memberList={{
+        participantList={{
           props: {
             onSearch: (memberType) => {
               navigation.push('SearchMember', { params: { memberType } });

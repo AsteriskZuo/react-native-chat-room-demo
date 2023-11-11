@@ -101,7 +101,7 @@ export function App() {
         isDevMode={env.isDevMode}
         palette={palette}
         theme={theme}
-        roomOption={{ marquee: { isVisible: true } }}
+        roomOption={{ globalBroadcast: { isVisible: true } }}
         language={'zh-Hans'}
         languageExtensionFactory={(language) => {
           if (language === 'zh-Hans') {

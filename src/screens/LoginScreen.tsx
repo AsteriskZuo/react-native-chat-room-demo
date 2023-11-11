@@ -5,7 +5,7 @@ import {
   Alert,
   AlertRef,
   LoadingIcon,
-  useIMContext,
+  useRoomContext,
 } from 'react-native-chat-room';
 
 import { Agora, AppServerClient, Easemob, UserDataManager } from '../common';
@@ -15,7 +15,7 @@ type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function LoginScreen(props: Props) {
   const { navigation } = props;
   const appType = require('../env').accountType;
-  const im = useIMContext();
+  const im = useRoomContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const alertRef = React.useRef<AlertRef>({} as any);
   const loginAction = React.useCallback(

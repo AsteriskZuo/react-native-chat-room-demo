@@ -17,10 +17,10 @@ import {
   Switch,
   useColors,
   useI18nContext,
-  useIMContext,
-  useIMListener,
   useLifecycle,
   usePaletteContext,
+  useRoomContext,
+  useRoomListener,
 } from 'react-native-chat-room';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -45,7 +45,7 @@ export function ChannelListScreen(props: Props) {
   const toastRef = React.useRef<SimpleToastRef>({} as any);
   const [value, onValueChange] = React.useState(false);
   const [user, setUser] = React.useState<UserData | undefined>(undefined);
-  const im = useIMContext();
+  const im = useRoomContext();
   const { colors } = usePaletteContext();
   const { getColor } = useColors({
     bg: {
@@ -146,7 +146,7 @@ export function ChannelListScreen(props: Props) {
     }
   }, [im.client, im.userId]);
 
-  useIMListener(
+  useRoomListener(
     React.useMemo(() => {
       return {
         onError: (params) => {

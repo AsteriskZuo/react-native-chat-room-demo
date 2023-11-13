@@ -27,7 +27,7 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.14",
-    "react-native-chat-room": "git+https://github.com/AsteriskZuo/react-native-chat-room.git#4ad4981e9d969920e99ee54e5a8a546792354342",
+    "react-native-chat-room": "git+https://github.com/AsteriskZuo/react-native-chat-room.git#54cbe20313f5fef24e3cdb4fc2a1f627d4f3dc0b",
     "react-native-chat-sdk": "1.2.2-beta.1",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-safe-area-context": "4.5.0",

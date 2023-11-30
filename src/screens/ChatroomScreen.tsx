@@ -1,6 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
 import {
+  Dimensions,
   Platform,
   Text,
   ToastAndroid,
@@ -14,6 +15,9 @@ import {
   BottomSheetGift2,
   BottomSheetGiftSimuRef,
   Chatroom,
+  gGiftEffectListHeight,
+  gInputBarStyleHeight,
+  gMessageListHeight,
   Icon,
   IconButton,
   seqId,
@@ -33,14 +37,14 @@ import {
   useOnErrorParser,
   useOnFinishedParser,
 } from '../common';
-import { gGifts, gGifts2 } from '../const';
+import { gGifts } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChatroomScreen(props: Props) {
   const { navigation, route } = props;
   const room = (route.params as any).params.room as RoomData;
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
   const alertRef = React.useRef<AlertRef>({} as any);
   const chatroomRef = React.useRef<Chatroom>({} as any);
@@ -71,6 +75,18 @@ export function ChatroomScreen(props: Props) {
   const { parseError } = useOnErrorParser();
   const { parseFinished } = useOnFinishedParser();
   const { tr } = useI18nContext();
+  const messageTop =
+    Dimensions.get('window').height -
+    gMessageListHeight -
+    gInputBarStyleHeight -
+    bottom;
+  const giftTop =
+    Dimensions.get('window').height -
+    gMessageListHeight -
+    gInputBarStyleHeight -
+    gGiftEffectListHeight -
+    4 -
+    bottom;
 
   useRoomListener(
     React.useMemo(() => {
@@ -169,6 +185,26 @@ export function ChatroomScreen(props: Props) {
           },
         }}
         backgroundView={<BackgroundVideoMemo />}
+        messageList={{
+          props: {
+            containerStyle: {
+              position: 'absolute',
+              // backgroundColor: 'red',
+              // bottom: 0,
+              top: messageTop,
+            },
+          },
+        }}
+        gift={{
+          props: {
+            containerStyle: {
+              position: 'absolute',
+              top: giftTop,
+              left: 16,
+              // backgroundColor: 'red',
+            },
+          },
+        }}
         input={{
           props: {
             keyboardVerticalOffset: Platform.OS === 'ios' ? pageY : 0,
@@ -210,10 +246,7 @@ export function ChatroomScreen(props: Props) {
       <BottomSheetGift2
         ref={giftRef}
         maskStyle={{ transform: [{ translateY: -pageY }] }}
-        gifts={[
-          { title: 'gift1', gifts: gGifts },
-          { title: 'gift2', gifts: gGifts2 },
-        ]}
+        gifts={[{ title: 'gift1', gifts: gGifts }]}
         onSend={(giftId) => {
           for (const gift of gGifts) {
             if (gift.giftId === giftId) {
@@ -353,12 +386,13 @@ export const ChatroomHeader = (
           alignItems: 'center',
           borderRadius: 19,
           backgroundColor: getColor('bg'),
-          paddingLeft: 2,
-          paddingRight: 10,
+          paddingLeft: 3,
+          paddingRight: 16,
+          paddingVertical: 2,
         }}
       >
         <Avatar borderRadius={32} size={32} url={room?.ownerAvatar} />
-        <View style={{ width: 5 }} />
+        <View style={{ width: 8 }} />
         <View>
           <Text
             style={{

@@ -21,7 +21,7 @@ export function Easemob() {
             color: '#6C7192',
           }}
         >
-          {'Powered by Agora.io'}
+          {'Powered by Easemob.com'}
         </Text>
       </View>
     </View>

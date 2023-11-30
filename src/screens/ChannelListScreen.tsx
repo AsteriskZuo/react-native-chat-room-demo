@@ -436,6 +436,7 @@ const ListRenderItem = (props: {
             {room.roomName ?? room.roomId}
           </Text>
         </View>
+        <View style={{ height: 8 }} />
         <View
           style={{
             flexDirection: 'row',

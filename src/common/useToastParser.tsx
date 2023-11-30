@@ -1,16 +1,16 @@
 import {
   ErrorCode,
-  IMEventType,
+  RoomEventType,
   UIKitError,
   useI18nContext,
 } from 'react-native-chat-room';
 
 export function useOnFinishedParser() {
   const { tr } = useI18nContext();
-  const parseFinished = (eventType: IMEventType) => {
+  const parseFinished = (eventType: RoomEventType) => {
     switch (eventType) {
-      case 'join':
-        return tr('enter');
+      // case 'join':
+      //   return tr('enter');
       case 'mute':
         return tr('muteSuccess');
       case 'unmute':

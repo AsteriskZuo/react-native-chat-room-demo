@@ -5,7 +5,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useFonts } from 'expo-font';
+// import { useFonts } from 'expo-font';
 import * as React from 'react';
 import { Appearance, DeviceEventEmitter, View } from 'react-native';
 import {
@@ -37,14 +37,14 @@ export function App() {
   const [theme, setTheme] = React.useState(light);
   const isNavigationReadyRef = React.useRef(false);
   const isContainerReadyRef = React.useRef(false);
-  const isFontReadyRef = React.useRef(false);
+  const isFontReadyRef = React.useRef(true);
   // const [isReady, setIsReady] = React.useState(false);
   const navigationRef = useNavigationContainerRef<RootParamsList>();
   const isReadyRef = React.useRef(false);
-  const fontFamily = 'Twemoji-Mozilla';
-  const [fontsLoaded] = useFonts({
-    [fontFamily]: require('../assets/twemoji.ttf'),
-  });
+  // const fontFamily = 'Twemoji-Mozilla';
+  // const [fontsLoaded] = useFonts({
+  //   [fontFamily]: require('../assets/twemoji.ttf'),
+  // });
 
   const formatNavigationState = (
     state: NavigationState | undefined,
@@ -100,16 +100,16 @@ export function App() {
     DeviceEventEmitter.emit('example_login', {});
   };
 
-  if (fontsLoaded) {
-    isFontReadyRef.current = true;
-    if (
-      isFontReadyRef.current === true &&
-      isNavigationReadyRef.current === true &&
-      isContainerReadyRef.current === true
-    ) {
-      onReady(true);
-    }
-  }
+  // if (fontsLoaded) {
+  //   isFontReadyRef.current = true;
+  //   if (
+  //     isFontReadyRef.current === true &&
+  //     isNavigationReadyRef.current === true &&
+  //     isContainerReadyRef.current === true
+  //   ) {
+  //     onReady(true);
+  //   }
+  // }
 
   return (
     <React.StrictMode>
@@ -127,7 +127,7 @@ export function App() {
             return createStringSetEn();
           }
         }}
-        fontFamily={fontFamily}
+        // fontFamily={fontFamily}
         onInitialized={() => {
           console.log('dev:onInitialized:');
           isContainerReadyRef.current = true;

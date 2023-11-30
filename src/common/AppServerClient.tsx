@@ -56,7 +56,6 @@ export class AppServerClient {
       .then((response) => {
         // !!! https://github.com/expo/expo/issues/6496
         // tip: There was a problem sending log messages to your development environment [PrettyFormatPluginError: value.hasOwnProperty is not a function.
-        // console.log('test:zuoyu:getRoomList:', response);
         if (response.status === 200) {
           return response.json();
         } else {

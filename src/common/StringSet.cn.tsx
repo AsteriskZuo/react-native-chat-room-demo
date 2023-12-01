@@ -8,7 +8,7 @@ export function createStringSetCn(): StringSet {
     },
     'channelList': '聊天室',
     'channelListName': (a: string) => `${a}的聊天室`,
-    'enter': '进入',
+    'Enter': '进入',
     'create': '创建',
     'leaveRoom': '离开聊天室?',
     'leaveFailed': '离开聊天室失败',

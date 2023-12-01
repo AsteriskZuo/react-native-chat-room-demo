@@ -8,7 +8,7 @@ export function createStringSetEn(): StringSet {
     },
     'channelList': 'Channel List',
     'channelListName': (a: string) => `${a}'s Channel`,
-    'enter': 'Enter',
+    'Enter': 'Enter',
     'create': 'Create',
     'leaveRoom': 'Want to end live streaming?',
     'leaveFailed': 'Leave channel failed',

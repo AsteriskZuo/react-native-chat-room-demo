@@ -119,7 +119,7 @@ export function App() {
         palette={palette}
         theme={theme}
         roomOption={{ globalBroadcast: { isVisible: true } }}
-        language={'zh-Hans'}
+        // language={'zh-Hans'}
         languageExtensionFactory={(language) => {
           if (language === 'zh-Hans') {
             return createStringSetCn();

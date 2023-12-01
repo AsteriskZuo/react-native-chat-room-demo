@@ -373,6 +373,7 @@ const ListRenderItem = (props: {
 }) => {
   const { room, onResult } = props;
   const { colors } = usePaletteContext();
+  const { tr } = useI18nContext();
   const { getColor } = useColors({
     bg: {
       light: colors.neutral[95],
@@ -462,7 +463,7 @@ const ListRenderItem = (props: {
             sizesType={'small'}
             radiusType={'large'}
             contentType={'only-text'}
-            text={'Enter'}
+            text={tr('Enter')}
             onPress={() => {
               onResult(room);
             }}

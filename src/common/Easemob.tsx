@@ -21,7 +21,7 @@ export function Easemob() {
             color: '#6C7192',
           }}
         >
-          {'Powered by Easemob.com'}
+          {'Powered by Easemob'}
         </Text>
       </View>
     </View>

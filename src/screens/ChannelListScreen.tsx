@@ -355,7 +355,7 @@ export function ChannelListScreen(props: Props) {
             sizesType={'large'}
             radiusType={'large'}
             contentType={'icon-text'}
-            text={'Create'}
+            text={tr('Create')}
             icon={'video_camera_splus'}
             onPress={createRoom}
           />

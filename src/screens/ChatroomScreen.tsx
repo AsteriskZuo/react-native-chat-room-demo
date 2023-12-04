@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   Dimensions,
   Platform,
+  StatusBar,
   Text,
   ToastAndroid,
   TouchableOpacity,
@@ -12,7 +13,7 @@ import {
   Alert,
   AlertRef,
   Avatar,
-  BottomSheetGift2,
+  BottomSheetGift,
   BottomSheetGiftSimuRef,
   Chatroom,
   gGiftEffectListHeight,
@@ -75,18 +76,46 @@ export function ChatroomScreen(props: Props) {
   const { parseError } = useOnErrorParser();
   const { parseFinished } = useOnFinishedParser();
   const { tr } = useI18nContext();
-  const messageTop =
-    Dimensions.get('window').height -
-    gMessageListHeight -
-    gInputBarStyleHeight -
-    bottom;
-  const giftTop =
-    Dimensions.get('window').height -
-    gMessageListHeight -
-    gInputBarStyleHeight -
-    gGiftEffectListHeight -
-    4 -
-    bottom;
+  const messageTop = () => {
+    if (Platform.OS === 'ios') {
+      return (
+        Dimensions.get('window').height -
+        gMessageListHeight -
+        gInputBarStyleHeight -
+        bottom
+      );
+    } else {
+      return (
+        Dimensions.get('window').height -
+        gMessageListHeight -
+        gInputBarStyleHeight -
+        bottom -
+        (StatusBar.currentHeight ?? 0)
+      );
+    }
+  };
+  const giftTop = () => {
+    if (Platform.OS === 'ios') {
+      return (
+        Dimensions.get('window').height -
+        gMessageListHeight -
+        gInputBarStyleHeight -
+        gGiftEffectListHeight -
+        4 -
+        bottom
+      );
+    } else {
+      return (
+        Dimensions.get('window').height -
+        gMessageListHeight -
+        gInputBarStyleHeight -
+        gGiftEffectListHeight -
+        4 -
+        bottom -
+        (StatusBar.currentHeight ?? 0)
+      );
+    }
+  };
 
   useRoomListener(
     React.useMemo(() => {
@@ -167,6 +196,7 @@ export function ChatroomScreen(props: Props) {
             _pageX: number,
             pageY: number
           ) => {
+            // console.log('test:zuoyu:', _x, _y, _width, _height, _pageX, pageY);
             setPageY(pageY);
           }
         );
@@ -191,7 +221,8 @@ export function ChatroomScreen(props: Props) {
               position: 'absolute',
               // backgroundColor: 'red',
               // bottom: 0,
-              top: messageTop,
+              // top: messageTop,
+              top: messageTop(),
             },
           },
         }}
@@ -199,7 +230,7 @@ export function ChatroomScreen(props: Props) {
           props: {
             containerStyle: {
               position: 'absolute',
-              top: giftTop,
+              top: giftTop(),
               left: 16,
               // backgroundColor: 'red',
             },
@@ -243,10 +274,10 @@ export function ChatroomScreen(props: Props) {
           console.log('ChatroomScreen:onError:2', e.toString());
         }}
       />
-      <BottomSheetGift2
+      <BottomSheetGift
         ref={giftRef}
         maskStyle={{ transform: [{ translateY: -pageY }] }}
-        gifts={[{ title: 'gift1', gifts: gGifts }]}
+        gifts={[{ title: tr('gifts'), gifts: gGifts }]}
         onSend={(giftId) => {
           for (const gift of gGifts) {
             if (gift.giftId === giftId) {
@@ -384,7 +415,7 @@ export const ChatroomHeader = (
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          borderRadius: 19,
+          borderRadius: 48,
           backgroundColor: getColor('bg'),
           paddingLeft: 3,
           paddingRight: 16,

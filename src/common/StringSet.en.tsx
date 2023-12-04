@@ -9,7 +9,7 @@ export function createStringSetEn(): StringSet {
     'channelList': 'Channel List',
     'channelListName': (a: string) => `${a}'s Channel`,
     'Enter': 'Enter',
-    'create': 'Create',
+    'Create': 'Create',
     'leaveRoom': 'Want to end live streaming?',
     'leaveFailed': 'Leave channel failed',
     'joinFailed': 'Join channel failed',
@@ -22,5 +22,6 @@ export function createStringSetEn(): StringSet {
     'unmuteFailed': 'Unmute failed',
     'kickSuccess': 'Kick success',
     'kickFailed': 'Kick failed',
+    'gifts': 'gifts',
   };
 }

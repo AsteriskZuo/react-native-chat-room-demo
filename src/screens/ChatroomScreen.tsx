@@ -209,7 +209,7 @@ export function ChatroomScreen(props: Props) {
             _pageX: number,
             pageY: number
           ) => {
-            // console.log('test:zuoyu:', _x, _y, _width, _height, _pageX, pageY);
+            // console.log('dev:', _x, _y, _width, _height, _pageX, pageY);
             setPageY(pageY);
           }
         );

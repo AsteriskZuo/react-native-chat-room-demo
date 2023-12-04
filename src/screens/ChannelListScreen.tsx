@@ -37,7 +37,10 @@ import { randomCover } from '../utils/utils';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChannelListScreen(props: Props) {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const pageState = (route.params as any).params?.pageCount ?? 0;
+  console.log('test:zuoyu:pagecount:234:', pageState, route.params);
+  const pageCount = React.useRef(0);
   const [isStop, setIsStop] = React.useState(true);
   const dataRef = React.useRef<{ id: string; room: RoomData }[]>([]);
   const [data, setData] = React.useState(dataRef.current);
@@ -118,6 +121,13 @@ export function ChannelListScreen(props: Props) {
       [request]
     )
   );
+
+  React.useEffect(() => {
+    if (pageState) {
+      console.log('test:zuoyu:count:', pageState);
+      request();
+    }
+  }, [pageState, request]);
 
   const onLeaveRoom = React.useCallback(async () => {
     if (im.userId === roomRef.current?.owner) {
@@ -238,7 +248,9 @@ export function ChannelListScreen(props: Props) {
 
   const enterRoom = (room: RoomData) => {
     roomRef.current = room;
-    navigation.push('Chatroom', { params: { room } });
+    navigation.push('Chatroom', {
+      params: { room, pageCount: ++pageCount.current },
+    });
   };
 
   return (

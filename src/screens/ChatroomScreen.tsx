@@ -45,6 +45,7 @@ type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChatroomScreen(props: Props) {
   const { navigation, route } = props;
   const room = (route.params as any).params.room as RoomData;
+  const pageCount = (route.params as any).params.pageCount as number;
   const { top, bottom } = useSafeAreaInsets();
   const testRef = React.useRef<View>({} as any);
   const alertRef = React.useRef<AlertRef>({} as any);
@@ -117,6 +118,18 @@ export function ChatroomScreen(props: Props) {
     }
   };
 
+  const onNavigationGoBack = React.useCallback(() => {
+    navigation.navigate({
+      name: 'ChannelList',
+      params: {
+        params: {
+          pageCount,
+        },
+      },
+      merge: true,
+    });
+  }, [navigation, pageCount]);
+
   useRoomListener(
     React.useMemo(() => {
       return {
@@ -150,7 +163,7 @@ export function ChatroomScreen(props: Props) {
         },
         onUserBeKicked: (roomId: string, reason: number) => {
           console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
-          navigation.goBack();
+          onNavigationGoBack();
         },
         onUserMuted: (roomId, userIds, operatorId) => {
           console.log(
@@ -171,7 +184,7 @@ export function ChatroomScreen(props: Props) {
           tr('beUnmuted');
         },
       };
-    }, [navigation, parseError, parseFinished, tr])
+    }, [onNavigationGoBack, parseError, parseFinished, tr])
   );
 
   const onGoBack = () => {
@@ -343,7 +356,7 @@ export function ChatroomScreen(props: Props) {
             text: tr('Confirm'),
             onPress: () => {
               alertRef.current.close?.(() => {
-                navigation.goBack();
+                onNavigationGoBack();
               });
             },
           },

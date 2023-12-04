@@ -38,8 +38,8 @@ import { randomCover } from '../utils/utils';
 type Props = NativeStackScreenProps<RootScreenParamsList>;
 export function ChannelListScreen(props: Props) {
   const { navigation, route } = props;
-  const pageState = (route.params as any).params?.pageCount ?? 0;
-  const pageCount = React.useRef(0);
+  const pageState = (route.params as any).params?.pageCount ?? 1;
+  const pageCount = React.useRef(1);
   const [isStop, setIsStop] = React.useState(true);
   const dataRef = React.useRef<{ id: string; room: RoomData }[]>([]);
   const [data, setData] = React.useState(dataRef.current);
@@ -109,17 +109,17 @@ export function ChannelListScreen(props: Props) {
     }, 1000);
   };
 
-  useLifecycle(
-    React.useCallback(
-      async (state) => {
-        if (state === 'load') {
-          request();
-        } else {
-        }
-      },
-      [request]
-    )
-  );
+  // useLifecycle(
+  //   React.useCallback(
+  //     async (state) => {
+  //       if (state === 'load') {
+  //         request();
+  //       } else {
+  //       }
+  //     },
+  //     [request]
+  //   )
+  // );
 
   React.useEffect(() => {
     if (pageState) {

@@ -23,5 +23,6 @@ export function createStringSetEn(): StringSet {
     'kickSuccess': 'Kick success',
     'kickFailed': 'Kick failed',
     'gifts': 'gifts',
+    'messageReportSuccess': 'Report success',
   };
 }

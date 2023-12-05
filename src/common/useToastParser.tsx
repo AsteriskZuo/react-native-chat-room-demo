@@ -17,6 +17,8 @@ export function useOnFinishedParser() {
         return tr('unmuteSuccess');
       case 'kick':
         return tr('kickSuccess');
+      case 'report_message':
+        return tr('messageReportSuccess');
 
       default:
         return undefined;

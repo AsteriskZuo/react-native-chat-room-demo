@@ -23,5 +23,6 @@ export function createStringSetCn(): StringSet {
     'kickSuccess': '移出聊天室成功',
     'kickFailed': '移出聊天室失败',
     'gifts': '打赏',
+    'messageReportSuccess': '举报成功',
   };
 }

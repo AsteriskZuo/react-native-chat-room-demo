@@ -29,6 +29,7 @@ import {
   usePaletteContext,
   useRoomContext,
   useRoomListener,
+  UserServiceData,
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -68,8 +69,8 @@ export function ChatroomScreen(props: Props) {
       dark: colors.neutral[98],
     },
     marquee: {
-      light: '#FF6680',
-      dark: '#33B1FF',
+      light: 'hsla(203, 100%, 60%, 1)',
+      dark: 'hsla(203, 100%, 60%, 1)',
     },
   });
 
@@ -161,6 +162,12 @@ export function ChatroomScreen(props: Props) {
             }
           }
         },
+        onUserJoined: (roomId: string, user: UserServiceData): void => {
+          console.log('ChatroomScreen:onUserJoined:', roomId, user);
+        },
+        onUserLeave: (roomId: string, userId: string): void => {
+          console.log('ChatroomScreen:onUserLeave:', roomId, userId);
+        },
         onUserBeKicked: (roomId: string, reason: number) => {
           console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
           onNavigationGoBack();
@@ -172,7 +179,14 @@ export function ChatroomScreen(props: Props) {
             userIds,
             operatorId
           );
-          tr('beMuted');
+          if (Platform.OS === 'ios') {
+            toastRef.current.show({
+              message: tr('beMuted'),
+              timeout: 3000,
+            });
+          } else {
+            ToastAndroid.show(tr('beMuted'), 3000);
+          }
         },
         onUserUnmuted: (roomId, userIds, operatorId) => {
           console.log(
@@ -181,7 +195,14 @@ export function ChatroomScreen(props: Props) {
             userIds,
             operatorId
           );
-          tr('beUnmuted');
+          if (Platform.OS === 'ios') {
+            toastRef.current.show({
+              message: tr('beUnmuted'),
+              timeout: 3000,
+            });
+          } else {
+            ToastAndroid.show(tr('beUnmuted'), 3000);
+          }
         },
       };
     }, [onNavigationGoBack, parseError, parseFinished, tr])
@@ -223,7 +244,7 @@ export function ChatroomScreen(props: Props) {
               marginLeft: 12,
               // width: winWidth - 24,
               marginTop: 8 + top + 44,
-              // backgroundColor: getColor('marquee'),
+              backgroundColor: getColor('marquee'),
             },
           },
         }}

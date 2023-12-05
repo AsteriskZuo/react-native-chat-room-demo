@@ -241,7 +241,8 @@ export function ChatroomScreen(props: Props) {
         globalBroadcast={{
           props: {
             containerStyle: {
-              marginLeft: 12,
+              position: 'absolute',
+              marginHorizontal: 12,
               // width: winWidth - 24,
               marginTop: 8 + top + 44,
               backgroundColor: getColor('marquee'),

@@ -160,6 +160,7 @@ export class AppServerClient {
         }
       })
       .then((json) => {
+        console.warn('test:removeRoom:', json);
         const data = json;
 
         params.onResult({ isOk: true, roomId: data.id });

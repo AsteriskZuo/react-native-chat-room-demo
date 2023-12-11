@@ -6,3 +6,5 @@ export const a_lightImage = require('./assets/390w_light_2x.png');
 export const a_darkImage = require('./assets/390w_dark_2x.png');
 
 export const a_video = require('./assets/video_easemob.mov');
+
+export const a_default_avatar = require('./assets/default_avatar.png');

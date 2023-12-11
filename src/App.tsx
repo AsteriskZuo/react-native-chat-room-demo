@@ -15,6 +15,7 @@ import {
   usePresetPalette,
 } from 'react-native-chat-room';
 
+import { a_default_avatar } from './assets';
 import { createStringSetCn, createStringSetEn } from './common';
 import type { RootParamsList, RootParamsName } from './routes';
 import {
@@ -144,6 +145,7 @@ export function App() {
             onReady(true);
           }
         }}
+        avatar={{ borderRadiusStyle: 'large', localIcon: a_default_avatar }}
       >
         <NavigationContainer
           ref={navigationRef}

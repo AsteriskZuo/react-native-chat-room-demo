@@ -52,21 +52,27 @@ export function LoginScreen(props: Props) {
                           navigation.replace('ChannelList', {});
                           return;
                         }
-                      } catch (error) {}
+                      } catch (error) {
+                        console.warn('im.login failed', error);
+                        onFinished(false);
+                        alertRef.current?.alert?.();
+                        return;
+                      }
+                      console.warn('im.login failed', params);
                       onFinished(false);
                       alertRef.current?.alert?.();
                     }
                   },
                 });
               } else {
-                console.warn('getLoginToken failed');
+                console.warn('getLoginToken failed', params);
                 onFinished(false);
                 alertRef.current?.alert?.();
               }
             },
           });
         } else {
-          console.warn('getCurrentUser failed');
+          console.warn('getCurrentUser failed', params);
           onFinished(false);
           alertRef.current?.alert?.();
         }

@@ -177,8 +177,12 @@ export function ChatroomScreen(props: Props) {
             'ChatroomScreen:onUserMuted:',
             roomId,
             userIds,
-            operatorId
+            operatorId,
+            im.userId
           );
+          if (im.userId !== userIds[0]) {
+            return;
+          }
           if (Platform.OS === 'ios') {
             toastRef.current.show({
               message: tr('beMuted'),
@@ -195,6 +199,9 @@ export function ChatroomScreen(props: Props) {
             userIds,
             operatorId
           );
+          if (im.userId !== userIds[0]) {
+            return;
+          }
           if (Platform.OS === 'ios') {
             toastRef.current.show({
               message: tr('beUnmuted'),
@@ -205,7 +212,7 @@ export function ChatroomScreen(props: Props) {
           }
         },
       };
-    }, [onNavigationGoBack, parseError, parseFinished, tr])
+    }, [im.userId, onNavigationGoBack, parseError, parseFinished, tr])
   );
 
   const onGoBack = () => {

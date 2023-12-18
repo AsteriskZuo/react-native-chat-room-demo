@@ -32,12 +32,7 @@ import {
 } from 'react-native-chat-room';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {
-  BackgroundVideoMemo,
-  RoomData,
-  // useOnErrorParser,
-  // useOnFinishedParser,
-} from '../common';
+import { BackgroundVideoMemo, RoomData } from '../common';
 import { gGifts } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
@@ -74,8 +69,6 @@ export function ChatroomScreen(props: Props) {
   });
 
   const [pageY, setPageY] = React.useState(0);
-  // const { parseError } = useOnErrorParser();
-  // const { parseFinished } = useOnFinishedParser();
   const { tr } = useI18nContext();
   const messageTop = () => {
     if (Platform.OS === 'ios') {
@@ -135,31 +128,9 @@ export function ChatroomScreen(props: Props) {
       return {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
-          // const ret = parseError(params.error);
-          // if (ret) {
-          //   if (Platform.OS === 'ios') {
-          //     toastRef.current.show({
-          //       message: ret,
-          //       timeout: 3000,
-          //     });
-          //   } else {
-          //     ToastAndroid.show(ret, 3000);
-          //   }
-          // }
         },
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
-          // const ret = parseFinished(params.event);
-          // if (ret) {
-          //   if (Platform.OS === 'ios') {
-          //     toastRef.current.show({
-          //       message: ret,
-          //       timeout: 3000,
-          //     });
-          //   } else {
-          //     ToastAndroid.show(ret, 3000);
-          //   }
-          // }
         },
         onUserJoined: (roomId: string, user: UserServiceData): void => {
           console.log('ChatroomScreen:onUserJoined:', roomId, user);
@@ -179,17 +150,6 @@ export function ChatroomScreen(props: Props) {
             operatorId,
             im.userId
           );
-          // if (im.userId !== userIds[0]) {
-          //   return;
-          // }
-          // if (Platform.OS === 'ios') {
-          //   toastRef.current.show({
-          //     message: tr('beMuted'),
-          //     timeout: 3000,
-          //   });
-          // } else {
-          //   ToastAndroid.show(tr('beMuted'), 3000);
-          // }
         },
         onUserUnmuted: (roomId, userIds, operatorId) => {
           console.log(
@@ -198,17 +158,6 @@ export function ChatroomScreen(props: Props) {
             userIds,
             operatorId
           );
-          // if (im.userId !== userIds[0]) {
-          //   return;
-          // }
-          // if (Platform.OS === 'ios') {
-          //   toastRef.current.show({
-          //     message: tr('beUnmuted'),
-          //     timeout: 3000,
-          //   });
-          // } else {
-          //   ToastAndroid.show(tr('beUnmuted'), 3000);
-          // }
         },
       };
     }, [im.userId, onNavigationGoBack])

@@ -1,11 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
-import {
-  DeviceEventEmitter,
-  FlatList,
-  Platform,
-  ToastAndroid,
-} from 'react-native';
+import { DeviceEventEmitter, FlatList } from 'react-native';
 import { Text, View } from 'react-native';
 import {
   Avatar,
@@ -27,8 +22,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   AppServerClient,
   RoomData,
-  useOnErrorParser,
-  useOnFinishedParser,
+  // useOnErrorParser,
+  // useOnFinishedParser,
   UserData,
   UserDataManager,
 } from '../common';
@@ -67,8 +62,8 @@ export function ChannelListScreen(props: Props) {
       dark: colors.neutral[7],
     },
   });
-  const { parseError } = useOnErrorParser();
-  const { parseFinished } = useOnFinishedParser();
+  // const { parseError } = useOnErrorParser();
+  // const { parseFinished } = useOnFinishedParser();
   const { tr } = useI18nContext();
 
   const request = React.useCallback(
@@ -159,41 +154,40 @@ export function ChannelListScreen(props: Props) {
       return {
         onError: (params) => {
           console.log('ChatroomScreen:onError:', JSON.stringify(params));
-          const ret = parseError(params.error);
-          if (ret) {
-            if (Platform.OS === 'ios') {
-              toastRef.current.show({
-                message: ret,
-                timeout: 3000,
-              });
-            } else {
-              ToastAndroid.show(ret, 3000);
-            }
-          }
+          // const ret = parseError(params.error);
+          // if (ret) {
+          //   if (Platform.OS === 'ios') {
+          //     toastRef.current.show({
+          //       message: ret,
+          //       timeout: 3000,
+          //     });
+          //   } else {
+          //     ToastAndroid.show(ret, 3000);
+          //   }
+          // }
         },
         onFinished: (params) => {
           console.log('ChatroomScreen:onFinished:', params);
-          const ret = parseFinished(params.event);
-          if (ret) {
-            if (Platform.OS === 'ios') {
-              toastRef.current.show({
-                message: ret,
-                timeout: 3000,
-              });
-            } else {
-              ToastAndroid.show(ret, 3000);
-            }
-          }
+          // const ret = parseFinished(params.event);
+          // if (ret) {
+          //   if (Platform.OS === 'ios') {
+          //     toastRef.current.show({
+          //       message: ret,
+          //       timeout: 3000,
+          //     });
+          //   } else {
+          //     ToastAndroid.show(ret, 3000);
+          //   }
+          // }
           if (params.event === 'leave') {
             onLeaveRoom();
           }
         },
         onUserBeKicked: (roomId: string, reason: number) => {
           console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
-          tr('beRemove');
         },
       };
-    }, [onLeaveRoom, parseError, parseFinished, tr])
+    }, [onLeaveRoom])
   );
 
   useLifecycle(

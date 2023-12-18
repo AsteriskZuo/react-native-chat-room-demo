@@ -17,6 +17,7 @@ import {
 
 import { a_default_avatar } from './assets';
 import { createStringSetCn, createStringSetEn } from './common';
+import { ToastView } from './common/ToastView';
 import type { RootParamsList, RootParamsName } from './routes';
 import {
   ChannelListScreen,
@@ -214,6 +215,7 @@ export function App() {
             />
           </Root.Navigator>
         </NavigationContainer>
+        <ToastView />
       </Container>
       {/* {isReady === false ? <SplashScreen /> : null} */}
     </React.StrictMode>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, ToastAndroid, View } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 import {
   SimpleToast,
   SimpleToastRef,
@@ -103,9 +103,5 @@ export function ToastView(props: ToastViewProps) {
     }, [im.userId, parseError, parseFinished, tr])
   );
 
-  return (
-    <View>
-      <SimpleToast propsRef={toastRef} />
-    </View>
-  );
+  return <SimpleToast propsRef={toastRef} />;
 }

@@ -7,7 +7,7 @@ import { randomId, randomItem } from '../utils/utils';
 
 export type UserData = {
   userId: string;
-  nickName: string;
+  nickname: string;
   avatar: string;
 };
 
@@ -64,7 +64,7 @@ export class UserDataManager {
   static _createUser(userId: string): UserData {
     return {
       userId: userId,
-      nickName: randomItem(gUserNickName2),
+      nickname: randomItem(gUserNickName2),
       avatar: `${gAvatarUrlBasic}${randomItem(gUserAvatars)}`,
     };
   }

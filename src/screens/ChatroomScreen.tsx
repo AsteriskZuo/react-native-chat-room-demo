@@ -293,8 +293,8 @@ export function ChatroomScreen(props: Props) {
                       chatroomRef?.current?.getGiftMessageListRef()?.pushTask({
                         model: {
                           id: seqId('_gf').toString(),
-                          nickName:
-                            im.getUserInfo(im.userId)?.nickName ??
+                          nickname:
+                            im.getUserInfo(im.userId)?.nickname ??
                             im.userId ??
                             'unknown',
                           giftCount: 1,

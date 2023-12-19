@@ -23,17 +23,17 @@ export function LoginScreen(props: Props) {
       setIsLoading(true);
       UserDataManager.getCurrentUser((params) => {
         if (params.user) {
-          const { userId, nickName, avatar } = params.user;
+          const { userId, nickname, avatar } = params.user;
           AppServerClient.getLoginToken({
             userId,
-            nickName,
+            nickname,
             avatar,
             onResult: (params) => {
               if (params.isOk) {
                 im.login({
                   userId,
                   userToken: params.token!,
-                  userNickname: nickName,
+                  userNickname: nickname,
                   userAvatarURL: avatar,
                   result: (params) => {
                     if (params.isOk) {

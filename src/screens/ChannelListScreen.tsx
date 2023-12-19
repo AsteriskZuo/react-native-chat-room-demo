@@ -182,7 +182,7 @@ export function ChannelListScreen(props: Props) {
     }
     AppServerClient.createRoom({
       token: await im.client.getAccessToken(),
-      roomName: tr('channelListName', user.nickName ?? user.userId),
+      roomName: tr('channelListName', user.nickname ?? user.userId),
       roomOwnerId: im.userId,
       onResult: (params) => {
         if (params.isOk) {
@@ -314,7 +314,7 @@ export function ChannelListScreen(props: Props) {
               color: getColor('text1'),
             }}
           >
-            {user?.nickName ?? user?.userId}
+            {user?.nickname ?? user?.userId}
           </Text>
           <View style={{ flexGrow: 1 }} />
           <CmnButton

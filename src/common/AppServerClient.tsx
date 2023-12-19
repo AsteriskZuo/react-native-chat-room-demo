@@ -10,11 +10,11 @@ import type { RoomData } from './data';
 export class AppServerClient {
   static getLoginToken(params: {
     userId: string;
-    nickName: string;
+    nickname: string;
     avatar: string;
     onResult: (params: { isOk: boolean; token?: string }) => void;
   }) {
-    const { userId, nickName, avatar } = params;
+    const { userId, nickname, avatar } = params;
     fetch(gRegisterUserUrl, {
       method: 'POST',
       headers: {
@@ -22,7 +22,7 @@ export class AppServerClient {
       },
       body: JSON.stringify({
         username: userId,
-        nickname: nickName,
+        nickname: nickname,
         icon_key: avatar,
       }),
     })

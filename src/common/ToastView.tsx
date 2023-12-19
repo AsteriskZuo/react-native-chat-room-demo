@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Platform, ToastAndroid, View } from 'react-native';
 import {
+  SimpleToast,
   SimpleToastRef,
   useI18nContext,
   useRoomContext,
@@ -23,7 +24,7 @@ export function ToastView(props: ToastViewProps) {
     React.useMemo(() => {
       return {
         onError: (params) => {
-          console.log('ChatroomScreen:onError:', JSON.stringify(params));
+          console.log('ToastViewProps:onError:', JSON.stringify(params));
           const ret = parseError(params.error);
           if (ret) {
             if (Platform.OS === 'ios') {
@@ -37,7 +38,7 @@ export function ToastView(props: ToastViewProps) {
           }
         },
         onFinished: (params) => {
-          console.log('ChatroomScreen:onFinished:', params);
+          console.log('ToastViewProps:onFinished:', params);
           const ret = parseFinished(params.event);
           if (ret) {
             if (Platform.OS === 'ios') {
@@ -51,17 +52,17 @@ export function ToastView(props: ToastViewProps) {
           }
         },
         onUserJoined: (roomId: string, user: UserServiceData): void => {
-          console.log('ChatroomScreen:onUserJoined:', roomId, user);
+          console.log('ToastViewProps:onUserJoined:', roomId, user);
         },
         onUserLeave: (roomId: string, userId: string): void => {
-          console.log('ChatroomScreen:onUserLeave:', roomId, userId);
+          console.log('ToastViewProps:onUserLeave:', roomId, userId);
         },
         onUserBeKicked: (roomId: string, reason: number) => {
-          console.log('ChatroomScreen:onUserBeKicked:', roomId, reason);
+          console.log('ToastViewProps:onUserBeKicked:', roomId, reason);
         },
         onUserMuted: (roomId, userIds, operatorId) => {
           console.log(
-            'ChatroomScreen:onUserMuted:',
+            'ToastViewProps:onUserMuted:',
             roomId,
             userIds,
             operatorId,
@@ -81,7 +82,7 @@ export function ToastView(props: ToastViewProps) {
         },
         onUserUnmuted: (roomId, userIds, operatorId) => {
           console.log(
-            'ChatroomScreen:onUserUnmuted:',
+            'ToastViewProps:onUserUnmuted:',
             roomId,
             userIds,
             operatorId
@@ -102,5 +103,9 @@ export function ToastView(props: ToastViewProps) {
     }, [im.userId, parseError, parseFinished, tr])
   );
 
-  return <View />;
+  return (
+    <View>
+      <SimpleToast propsRef={toastRef} />
+    </View>
+  );
 }

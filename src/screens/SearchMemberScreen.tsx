@@ -31,6 +31,9 @@ export function SearchMemberScreen(props: Props) {
           onRequestClose={() => {
             navigation.goBack();
           }}
+          onMuteOperatorFinished={() => {
+            navigation.goBack();
+          }}
         />
       </SafeAreaView>
     </View>

@@ -39,7 +39,7 @@ export function ToastView(props: ToastViewProps) {
         },
         onFinished: (params) => {
           console.log('ToastViewProps:onFinished:', params);
-          const ret = parseFinished(params.event);
+          const ret = parseFinished(params.event, params.extra);
           if (ret) {
             if (Platform.OS === 'ios') {
               toastRef.current.show({

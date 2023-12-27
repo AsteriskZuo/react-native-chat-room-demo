@@ -7876,9 +7876,9 @@ react-is@^17.0.1:
   resolved "https://registry.npmmirror.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#3e634ef28660caa0d36976584709aa11461d9d12":
+"react-native-chat-room@git+https://github.com/AsteriskZuo/react-native-chat-room.git#a9cd48ac09455084eef33635b974c3d292c5947c":
   version "0.1.0"
-  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#3e634ef28660caa0d36976584709aa11461d9d12"
+  resolved "git+https://github.com/AsteriskZuo/react-native-chat-room.git#a9cd48ac09455084eef33635b974c3d292c5947c"
 
 react-native-chat-sdk@1.3.0-beta.1:
   version "1.3.0-beta.1"

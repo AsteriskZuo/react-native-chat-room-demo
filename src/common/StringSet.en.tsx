@@ -15,6 +15,7 @@ export function createStringSetEn(): StringSet {
     'joinFailed': 'Join channel failed',
     'beMuted': 'You have been muted',
     'beUnmuted': 'You have been unmuted',
+    'beMutedCanNotSendMessage': 'You have been muted and cannot send messages.',
     'beRemove': 'You have been removed',
     'muteSuccess': 'Mute success',
     'unmuteSuccess': 'Unmute success',

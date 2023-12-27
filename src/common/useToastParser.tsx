@@ -7,7 +7,7 @@ import {
 
 export function useOnFinishedParser() {
   const { tr } = useI18nContext();
-  const parseFinished = (eventType: RoomEventType) => {
+  const parseFinished = (eventType: RoomEventType, extra?: any) => {
     switch (eventType) {
       // case 'join':
       //   return tr('enter');
@@ -15,8 +15,14 @@ export function useOnFinishedParser() {
         return tr('muteSuccess');
       case 'unmute':
         return tr('unmuteSuccess');
-      case 'kick':
-        return tr('kickSuccess');
+      case 'kick': {
+        if (extra) {
+          const { userName } = extra;
+          return tr('kickSuccess', userName);
+        } else {
+          return tr('kickSuccess');
+        }
+      }
       case 'report_message':
         return tr('messageReportSuccess');
 
@@ -43,6 +49,16 @@ export function useOnErrorParser() {
         return tr('unmuteFailed');
       case ErrorCode.room_kick_member_error:
         return tr('kickFailed');
+      case ErrorCode.msg_send_error:
+        try {
+          const d = JSON.parse(error.desc);
+          if (d.code === 215) {
+            return tr('beMutedCanNotSendMessage');
+          }
+          return undefined;
+        } catch (e) {
+          return undefined;
+        }
 
       default:
         return undefined;

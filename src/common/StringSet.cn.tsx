@@ -14,15 +14,17 @@ export function createStringSetCn(): StringSet {
     'leaveFailed': '离开聊天室失败',
     'joinFailed': '加入聊天室失败',
     'beMuted': '您已被禁言',
+    'beMutedCanNotSendMessage': '您已被禁言，无法发送消息',
     'beUnmuted': '您已被解除禁言',
-    'beRemove': '您已被移出聊天室',
+    'beRemove': '您已被请出聊天室',
     'muteSuccess': '禁言成功',
     'unmuteSuccess': '解除禁言成功',
     'muteFailed': '禁言失败',
     'unmuteFailed': '解除禁言失败',
-    'kickSuccess': '移出聊天室成功',
+    'kickSuccess': (name) =>
+      name ? `已将${name}踢出聊天室` : '移出聊天室成功',
     'kickFailed': '移出聊天室失败',
     'gifts': '打赏',
-    'messageReportSuccess': '举报成功',
+    'messageReportSuccess': '举报已提交',
   };
 }

@@ -67,11 +67,12 @@ export function ChannelListScreen(props: Props) {
       const s = await im.loginState();
       if (s === 'logged') {
         const token = await im.client.getAccessToken();
-        dataRef.current = [];
+
         AppServerClient.getRoomList({
           token: token,
           onResult: (params) => {
             if (params.roomList) {
+              dataRef.current = [];
               for (const room of params.roomList) {
                 dataRef.current.push({
                   id: room.roomId,
@@ -83,6 +84,7 @@ export function ChannelListScreen(props: Props) {
                   index ===
                   self.findIndex((t) => t.room.roomId === item.room.roomId)
               );
+
               dataRef.current = uniqueList;
               setData([...dataRef.current]);
             }

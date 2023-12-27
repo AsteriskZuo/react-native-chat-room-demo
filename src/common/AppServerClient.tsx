@@ -41,6 +41,29 @@ export class AppServerClient {
         params.onResult({ isOk: false });
       });
   }
+  static async getLoginTokenSync(params: {
+    userId: string;
+    nickname: string;
+    avatar: string;
+  }): Promise<{ isOk: boolean; token?: string }> {
+    const { userId, nickname, avatar } = params;
+    const response = await fetch(gRegisterUserUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: userId,
+        nickname: nickname,
+        icon_key: avatar,
+      }),
+    });
+    if (response.status === 200) {
+      const json = await response.json();
+      return { isOk: true, token: json.access_token };
+    }
+    return { isOk: false };
+  }
   static getRoomList(params: {
     token: string;
     onResult: (params: { isOk: boolean; roomList?: RoomData[] }) => void;

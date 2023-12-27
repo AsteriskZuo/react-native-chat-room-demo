@@ -163,7 +163,7 @@ export function ChannelListScreen(props: Props) {
   useLifecycle(
     React.useCallback(async (state) => {
       if (state === 'load') {
-        UserDataManager.getCurrentUser((params) => {
+        UserDataManager.getCurrentUser(false, (params) => {
           if (params.user) {
             setUser(params.user);
           }

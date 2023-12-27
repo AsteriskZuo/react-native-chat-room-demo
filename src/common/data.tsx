@@ -61,7 +61,7 @@ export class UserDataManager {
     }
   }
 
-  static _createUser(userId: string): UserData {
+  static createUser(userId: string): UserData {
     return {
       userId: userId,
       nickname: randomItem(gUserNickName2),
@@ -71,6 +71,7 @@ export class UserDataManager {
 
   static getCurrentUserByUserId(
     userId: string,
+    autoCreate: boolean,
     onResult: (params: { user?: UserData }) => void
   ) {
     UserDataManager._getData({
@@ -80,24 +81,38 @@ export class UserDataManager {
           const user = JSON.parse(params.value) as UserData;
           onResult({ user });
         } else {
-          const user = UserDataManager._createUser(userId);
-          UserDataManager._storeData({
-            key: user.userId,
-            value: JSON.stringify(user),
-            onResult: (params) => {
-              if (params.isOk) {
-                onResult({ user });
-              } else {
-                onResult({});
-              }
-            },
-          });
+          if (autoCreate === true) {
+            const user = UserDataManager.createUser(userId);
+            this.setCurrentUser(user, onResult);
+          } else {
+            onResult({});
+          }
         }
       },
     });
   }
 
-  static getCurrentUser(onResult: (params: { user?: UserData }) => void) {
+  static setCurrentUser(
+    user: UserData,
+    onResult: (params: { user?: UserData }) => void
+  ) {
+    UserDataManager._storeData({
+      key: user.userId,
+      value: JSON.stringify(user),
+      onResult: (params) => {
+        if (params.isOk) {
+          onResult({ user });
+        } else {
+          onResult({});
+        }
+      },
+    });
+  }
+
+  static getCurrentUser(
+    autoCreate: boolean,
+    onResult: (params: { user?: UserData }) => void
+  ) {
     UserDataManager._getAllKeys({
       onResult: (params) => {
         if (params.error) {
@@ -105,10 +120,18 @@ export class UserDataManager {
         } else {
           if (params.value && params.value.length > 0) {
             const userId = params.value[0]!;
-            UserDataManager.getCurrentUserByUserId(userId, onResult);
+            UserDataManager.getCurrentUserByUserId(
+              userId,
+              autoCreate,
+              onResult
+            );
           } else {
             const userId = randomId();
-            UserDataManager.getCurrentUserByUserId(userId, onResult);
+            UserDataManager.getCurrentUserByUserId(
+              userId,
+              autoCreate,
+              onResult
+            );
           }
         }
       },

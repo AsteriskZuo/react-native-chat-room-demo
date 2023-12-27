@@ -78,6 +78,12 @@ export function ChannelListScreen(props: Props) {
                   room: room,
                 });
               }
+              const uniqueList = dataRef.current.filter(
+                (item, index, self) =>
+                  index ===
+                  self.findIndex((t) => t.room.roomId === item.room.roomId)
+              );
+              dataRef.current = uniqueList;
               setData([...dataRef.current]);
             }
 

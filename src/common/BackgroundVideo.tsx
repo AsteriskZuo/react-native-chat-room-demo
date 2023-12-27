@@ -18,7 +18,7 @@ export const BackgroundVideo = () => {
       <Video
         ref={ref}
         source={a_video}
-        resizeMode={ResizeMode.STRETCH}
+        resizeMode={ResizeMode.COVER}
         isLooping={true}
         style={{ width: '100%', height: winHeight }}
       />

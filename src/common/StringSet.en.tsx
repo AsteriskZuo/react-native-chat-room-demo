@@ -25,5 +25,15 @@ export function createStringSetEn(): StringSet {
     'kickFailed': 'Kick failed',
     'gifts': 'gifts',
     'messageReportSuccess': 'Report success',
+
+    'Unwelcome commercial content': 'Unwelcome commercial content',
+    'Pornographic or explicit content': 'Pornographic or explicit content',
+    'Child abuse': 'Child abuse',
+    'Hate speech or graphic violence': 'Hate speech or graphic violence',
+    'Promote terrorism': 'Promote terrorism',
+    'Harassment or bullying': 'Harassment or bullying',
+    'Suicide or self harm': 'Suicide or self harm',
+    'False information': 'False information',
+    'Others': 'Others',
   };
 }

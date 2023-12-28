@@ -26,5 +26,15 @@ export function createStringSetCn(): StringSet {
     'kickFailed': '移出聊天室失败',
     'gifts': '打赏',
     'messageReportSuccess': '举报已提交',
+
+    'Unwelcome commercial content': '不受欢迎的商业内容',
+    'Pornographic or explicit content': '色情或露骨内容',
+    'Child abuse': '虐待儿童',
+    'Hate speech or graphic violence': '仇恨言论或过于写实的暴力内容',
+    'Promote terrorism': '宣扬恐怖主义',
+    'Harassment or bullying': '骚扰或欺凌',
+    'Suicide or self harm': '自杀或自残',
+    'False information': '虚假信息',
+    'Others': '其他',
   };
 }

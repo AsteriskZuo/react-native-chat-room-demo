@@ -33,7 +33,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BackgroundVideoMemo, RoomData } from '../common';
-import { gGifts } from '../const';
+import { gGifts, gReportData } from '../const';
 import type { RootScreenParamsList } from '../routes';
 
 type Props = NativeStackScreenProps<RootScreenParamsList>;
@@ -213,6 +213,9 @@ export function ChatroomScreen(props: Props) {
               // bottom: 0,
               // top: messageTop,
               top: messageTop(),
+            },
+            reportProps: {
+              data: gReportData,
             },
           },
         }}

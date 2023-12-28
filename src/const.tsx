@@ -1,4 +1,4 @@
-import type { GiftListModel } from 'react-native-chat-room';
+import type { GiftListModel, ReportItemModel } from 'react-native-chat-room';
 
 export const gUserNickName1: string[] = [
   'Ethan',
@@ -442,3 +442,60 @@ export const gGifts: GiftListModel[] = [
   },
 ];
 export const gGifts2 = gGifts.slice(0, gGifts.length - 1);
+
+export const gReportData = [
+  {
+    id: '1',
+    tag: 'tag1',
+    title: 'Unwelcome commercial content',
+    checked: false,
+  },
+  {
+    id: '2',
+    tag: 'tag2',
+    title: 'Pornographic or explicit content',
+    checked: false,
+  },
+  {
+    id: '3',
+    tag: 'tag3',
+    title: 'Child abuse',
+    checked: false,
+  },
+  {
+    id: '4',
+    tag: 'tag4',
+    title: 'Hate speech or graphic violence',
+    checked: false,
+  },
+  {
+    id: '5',
+    tag: 'tag5',
+    title: 'Promote terrorism',
+    checked: false,
+  },
+  {
+    id: '6',
+    tag: 'tag6',
+    title: 'Harassment or bullying',
+    checked: false,
+  },
+  {
+    id: '7',
+    tag: 'tag7',
+    title: 'Suicide or self harm',
+    checked: false,
+  },
+  {
+    id: '8',
+    tag: 'tag8',
+    title: 'False information',
+    checked: false,
+  },
+  {
+    id: '9',
+    tag: 'tag9',
+    title: 'Others',
+    checked: false,
+  },
+] as ReportItemModel[];
